@@ -6,7 +6,11 @@ response = HTTParty.get("https://backend.codecrafters.io/api/v1/courses?include=
 parsed_response = JSON.parse(response.body)
 
 courses = parsed_response["data"].map do |course_data|
-  Course.new(id: course_data["id"], slug: course_data["attributes"]["slug"]).tap(&:validate!)
+  Course.new(
+    id: course_data["id"],
+    slug: course_data["attributes"]["slug"],
+    description_markdown: course_data["attributes"]["description-markdown"]
+  ).tap(&:validate!)
 end
 
 course_stages = parsed_response["included"].map do |stage_data|
@@ -23,6 +27,7 @@ courses.each do |course|
   puts "Generating fixtures for course #{course.slug}"
 
   FileUtils.mkdir_p("fixtures/#{course.slug}/stage_instructions") unless Dir.exist?("fixtures/#{course.slug}/stage_instructions")
+  File.write("fixtures/#{course.slug}/description.md", course.description_markdown)
 
   course_stages.each do |course_stage|
     next unless course_stage.course_id == course.id
