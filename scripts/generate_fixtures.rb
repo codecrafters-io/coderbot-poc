@@ -2,26 +2,9 @@ require_relative "../boot"
 
 puts "Fetching courses from API"
 
-response = HTTParty.get("https://backend.codecrafters.io/api/v1/courses?include=stages")
-parsed_response = JSON.parse(response.body)
-
-courses = parsed_response["data"].map do |course_data|
-  Course.new(
-    id: course_data["id"],
-    slug: course_data["attributes"]["slug"],
-    description_markdown: course_data["attributes"]["description-markdown"]
-  ).tap(&:validate!)
-end
-
-course_stages = parsed_response["included"].map do |stage_data|
-  CourseStage.new(
-    course_id: stage_data["relationships"]["course"]["data"]["id"],
-    description_markdown_template: stage_data["attributes"]["description-markdown-template"],
-    id: stage_data["id"],
-    position: stage_data["attributes"]["position"],
-    slug: stage_data["attributes"]["slug"]
-  ).tap(&:validate!)
-end
+Store.instance.fetch_all
+courses = Store.instance.models_for(Course)
+course_stages = Store.instance.models_for(CourseStage)
 
 courses.each do |course|
   puts "Generating fixtures for course #{course.slug}"

@@ -23,6 +23,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
+    interactor (3.1.2)
     json (2.6.3)
     language_server-protocol (3.17.0.3)
     lint_roller (1.1.0)
@@ -88,6 +89,7 @@ DEPENDENCIES
   activemodel
   activesupport
   httparty
+  interactor
   pry
   ruby-openai
   standard
