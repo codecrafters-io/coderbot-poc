@@ -12,7 +12,17 @@ loop do
   current_code = File.read("current_repository/app/main.py")
   test_runner_output = TestRunner.new("current_repository").run_tests
 
-  break if test_runner_output.passed?
+  if test_runner_output.passed?
+    puts ""
+    puts "Logs:"
+    puts ""
+
+    puts test_runner_output.last_stage_logs
+
+    puts ""
+    puts "All tests passed!"
+    break
+  end
 
   counter += 1
 
