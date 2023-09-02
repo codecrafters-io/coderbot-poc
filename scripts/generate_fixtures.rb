@@ -3,6 +3,10 @@ require_relative "../boot"
 puts "Fetching courses from API"
 
 Store.instance.fetch_all
+Store.instance.persist("fixtures/store.json")
+
+Store.instance.clear
+
 courses = Store.instance.models_for(Course)
 course_stages = Store.instance.models_for(CourseStage)
 

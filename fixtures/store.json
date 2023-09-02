@@ -1,0 +1,419 @@
+{
+  "Course": [
+    {
+      "id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "git",
+      "description_markdown": "In this challenge, you'll build a Git implementation that can initialize a\nrepository, create commits and clone a public repository from GitHub. Along the\nway, you'll learn about the `.git` directory, Git objects (blobs, commits,\ntrees etc.), packfiles, Git's transfer protocols and much more.\n"
+    },
+    {
+      "id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "redis",
+      "description_markdown": "In this challenge, you'll build a toy Redis clone\nthat's capable of handling basic commands like PING, GET\nand SET. Along the way, we'll learn about event loops, the Redis\nProtocol and more.\n"
+    },
+    {
+      "id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "sqlite",
+      "description_markdown": "In this challenge, you'll build a barebones SQLite implementation that supports\nbasic SQL queries like SELECT. Along the way you'll learn about SQLite's\n[file format](https://sqlite.org/fileformat.html), how indexed data is\nstored in B-trees and more.\n"
+    },
+    {
+      "id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "docker",
+      "description_markdown": "In this challenge, you'll build a toy Docker implementation that can pull an\nimage from [Docker Hub](https://hub.docker.com/) and execute commands in it.\nAlong the way, you'll learn about\n[chroot](https://en.wikipedia.org/wiki/Chroot), [kernel\nnamespaces](https://en.wikipedia.org/wiki/Linux_namespaces), the [docker\nregistry API](https://docs.docker.com/registry/spec/api/) and much more.\n"
+    },
+    {
+      "id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "grep",
+      "description_markdown": "[Regular expressions](https://en.wikipedia.org/wiki/Regular_expression) (Regexes, for short) are patterns used to \nmatch character combinations in strings. [`grep`](https://en.wikipedia.org/wiki/Grep) is a CLI tool for searching \nusing Regexes.\n\nIn this challenge you'll build your own implementation of `grep`. Along the way we'll learn about Regex syntax and \nhow Regexes are evaluated.\n"
+    },
+    {
+      "id": "d5a57f8f-0b0d-4033-926c-751b770cb968",
+      "slug": "http-server",
+      "description_markdown": "TODO: Add description\n"
+    },
+    {
+      "id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bittorrent",
+      "description_markdown": "In this challenge, you’ll build a BitTorrent client that's capable of parsing a .torrent file and downloading a file from a peer.\n\nAlong the way, we’ll learn about how torrent files are structured, HTTP trackers, BitTorrent’s Peer Protocol, pipelining and more.\n"
+    }
+  ],
+  "CourseStage": [
+    {
+      "id": "0fb86749-99ac-4d05-9a4d-628811d14a98",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "clone_repository",
+      "description_markdown_template": "This is the last stage of the challenge, and probably the hardest.\n\nIn this stage, you'll clone a public repository from GitHub. To do this,\nyou'll use Git's [Smart HTTP transfer\nprotocol](https://www.git-scm.com/docs/http-protocol).\n\n{{#lang_is_rust}}\nYou can use the [reqwest](https://crates.io/crates/reqwest) crate to make\nHTTP requests, we've included it in the `Cargo.toml` file.\n{{/lang_is_rust}}\n\nYour program will be invoked like this:\n\n```\n./your_git.sh clone https://github.com/blah/blah <some_dir>\n```\n\nYour program must create `<some_dir>` and clone the given repository into\nit.\n\nTo verify your changes, the tester will do the following:\n\n- Check the contents of a file\n- Read commit object attributes from the `.git` directory\n\nTo know more about the protocol format, checkout\n[gitprotocol-pack.txt](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitprotocol-pack.txt),\n[gitformat-pack.txt](https://github.com/git/git/blob/795ea8776befc95ea2becd8020c7a284677b4161/Documentation/gitformat-pack.txt),\nand\n[these](https://codewords.recurse.com/issues/three/unpacking-git-packfiles)\n[articles](https://medium.com/@concertdaw/sneaky-git-number-encoding-ddcc5db5329f).\n",
+      "position": 7
+    },
+    {
+      "id": "b593915f-656f-4892-ad3a-87c088b08968",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "init",
+      "description_markdown_template": "In this stage, you'll implement the `git init` command. This command\ninitializes a repository by creating a `.git` directory and some files\ninside it.\n\nYou can read more about what's inside the `.git` folder\n[here](http://gitready.com/advanced/2009/03/23/whats-inside-your-git-directory.html).\n\nFor the purposes of this challenge, you'll only need to create the bare\nminimum required for Git to function properly:\n\n```\n- .git/\n  - objects/\n  - refs/\n  - HEAD (should contain \"ref: refs/heads/master\\n\")\n```\n",
+      "position": 1
+    },
+    {
+      "id": "61a5e563-76f4-4648-9733-a4d65b572d07",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "write_tree",
+      "description_markdown_template": "Now that you know how to read a tree object, let's put your new found\nskills to test - can you _write_ a tree?\n\nHere's how the tester will invoke your program:\n\n```\n./your_git.sh write-tree\n```\n\nYou're expected to write the entire working directory as a tree object,\nand print the 40-char SHA.\n\nCaveat: Unlike the official Git implementation, we aren't going to\nimplement a staging area (the place where things go when you run `git\nadd`). We'll just assume that all files in the working directory are\nstaged. If you're testing this against `git` locally, make sure to run\n`git add .` before `git write-tree`.\n\nTo verify your implementation, the tester will read the tree object from\nthe `.git` directory.\n",
+      "position": 5
+    },
+    {
+      "id": "9a85afbe-73e1-420f-bacc-47486f9d04a9",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "create_blob",
+      "description_markdown_template": "In the previous stage, we learnt how to read a blob. In this stage, you'll\nadd a blob to your git repository by implementing the [`git\nhash-object`](https://git-scm.com/docs/git-hash-object) command.\n\nYour program will be called like so:\n\n```\n./your_git.sh hash-object -w <file>\n```\n\nIt is expected to store the data from `<file>` as a blob in `.git/objects`\nand print a 40-char SHA to stdout.\n\nTo verify your implementation, the tester will try to read the blob your\nprogram wrote. It'll do this using [`git\ncat-file`](https://git-scm.com/docs/git-cat-file), the command you\nimplemented in the previous stage.\n\n```\ngit cat-file -p <blob_sha>\n```\n",
+      "position": 3
+    },
+    {
+      "id": "918f829e-c076-4f9d-850c-478cad96965d",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "create_commit",
+      "description_markdown_template": "Let's move on to the last git object we'll be dealing with in this\nchallenge: [the commit](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_git_commit_objects).\n\nTo create a commit, you'll need the following information:\n\n- Committer/Author name + email\n- Timestamp\n- Tree SHA\n- Parent commit SHA(s), if any\n\nIn this stage, you'll implement [`git\ncommit-tree`](https://git-scm.com/docs/git-commit-tree), a plumbing\ncommand that creates a commit.\n\nYour program will be invoked like this:\n\n```\n./your_git.sh commit-tree <tree_sha> -p <commit_sha> -m <message>\n```\n\nYou'll receive exactly one parent commit, and exactly one line in the\nmessage. You're free to hardcode any valid name/email for the\nauthor/committer fields.\n\nYour program must create a commit object and print its 40-char SHA to\nstdout.\n\nTo verify your changes, the tester will read the commit object from the\n`.git` directory. It'll use the `git show` command to do this.\n",
+      "position": 6
+    },
+    {
+      "id": "ae8a7540-0589-4ebd-8e23-926cf8e8be23",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "read_tree",
+      "description_markdown_template": "Now that we've learnt how to read/write blobs, let's move onto our next\nGit object: [the tree](https://developer.github.com/v3/git/trees/).\n\nIn this stage, you'll implement the [`git\nls-tree`](https://git-scm.com/docs/git-ls-tree) command, which is used to\ninspect a tree object.\n\nThe tester will execute your program like this:\n\n```\n./your_git.sh ls-tree --name-only <tree_sha>\n```\n\nFor a directory structure like this:\n\n```\nyour_repo/\n  - file1\n  - dir1/\n    - file_in_dir_1\n    - file_in_dir_2\n  - dir2/\n    - file_in_dir_3\n```\n\nThe output expected is:\n\n```\ndir1\ndir2\nfile1\n```\n\n(Note that the output is alphabetically sorted, this is how Git stores\nentries in the tree object internally)\n\nTo know more about the internal format of a tree object, checkout [this\nStackOverflow\nquestion](https://stackoverflow.com/questions/14790681/what-is-the-internal-format-of-a-git-tree-object).\n",
+      "position": 4
+    },
+    {
+      "id": "b69e0f63-0786-475c-acd7-7c5a494b97ad",
+      "course_id": "4221b6a2-510e-471f-a0a6-8a9e85643911",
+      "slug": "read_blob",
+      "description_markdown_template": "In this challenge, we'll deal with three [Git\nobjects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects):\n\n  - blobs\n  - trees\n  - commits\n\nLet's start with blobs, which represent files (binary data, to be\nprecise).\n\nIn this stage, you'll read a blob from your git repository by fetching its\ncontents from the `.git/objects` directory.\n\nYou'll do this using the first of multiple [\"plumbing\"\ncommands](https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain)\nwe'll encounter in this challenge: [`git\ncat-file`](https://git-scm.com/docs/git-cat-file).\n\nYour program will be called like so:\n\n```\n./your_git.sh cat-file -p <blob_sha>\n```\n\nIt is expected to print out the binary data that the blob contains. \n\nIn many programming languages the default print function (like [`fmt.Println`](https://pkg.go.dev/fmt#example-Println)) \nwill append a newline to the output. The output of `cat-file` must not contain a \nnewline at the end, so you might need to use a different function to print the output.\n\n{{#lang_is_python}}\nKeep in mind that Git uses [Zlib](https://en.wikipedia.org/wiki/Zlib) to\ncompress objects. You can use Python's built-in\n[zlib](https://docs.python.org/3/library/zlib.html) library to read these\ncompressed files.\n{{/lang_is_python}}\n\n{{#lang_is_ruby}}\nKeep in mind that Git uses [Zlib](https://en.wikipedia.org/wiki/Zlib) to\ncompress objects. You can use Ruby's built-in\n[Zlib](https://ruby-doc.org/stdlib-2.7.0/libdoc/zlib/rdoc/Zlib.html)\nlibrary to read these compressed files.\n{{/lang_is_ruby}}\n\n{{#lang_is_go}}\nKeep in mind that Git uses [Zlib](https://en.wikipedia.org/wiki/Zlib) to\ncompress objects. You can use Go's built-in\n[compress/zlib](https://golang.org/pkg/compress/zlib/) package to read\nthese compressed files.\n{{/lang_is_go}}\n\n{{#lang_is_rust}}\nKeep in mind that Git uses [Zlib](https://en.wikipedia.org/wiki/Zlib) to\ncompress objects. You can use the\n[flate2](https://crates.io/crates/flate2) crate to read these compressed\nfiles, we've included it in the `Cargo.toml` file.\n{{/lang_is_rust}}\n",
+      "position": 2
+    },
+    {
+      "id": "d05f8785-6b11-4ee8-86dc-8bc68c1a8dfd",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "ping-pong-multiple",
+      "description_markdown_template": "In this stage, you'll respond to multiple\n[PING](https://redis.io/commands/ping) commands sent by the same connection.\n\nTo test your implementation using the [official Redis CLI](https://redis.io/docs/ui/cli/), you can start your server using \n`./spawn_redis_server.sh` and then run `echo -e \"ping\\nping\" | redis-cli` from your terminal. This will send two PING commands\nusing the same connection. \n\n{{#lang_is_javascript}}\nIn most languages, you'd need to run a loop that reads input from a connection and sends a\nresponse back. In JavaScript however, if you're listening to the\n[`data`](https://nodejs.org/api/net.html#net_event_data) event, this should be automatically handled for you. **It\nis very likely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nYou'll need to run a loop that reads input from a connection and sends a\nresponse back.\n{{/lang_is_javascript}}\n",
+      "position": 3
+    },
+    {
+      "id": "bcd70ccf-41b5-42db-87a3-e7b619336d3c",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "init",
+      "description_markdown_template": "In this stage, your task is to start a TCP server on port 6379, the default port that redis uses.\n",
+      "position": 1
+    },
+    {
+      "id": "0935950c-3566-4685-9eaf-6583cfef0f7c",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "ping-pong",
+      "description_markdown_template": "In this stage, you'll respond to the\n[PING](https://redis.io/commands/ping) command.\n\nYour server should respond with `+PONG\\r\\n`, which is \"PONG\" encoded as a [RESP simple string](https://redis.io/docs/reference/protocol-spec/#resp-simple-strings).\n\nSince the tester client _only_ sends the PING command at the moment, it's okay to\nignore what the client sends and hardcode a response. We'll get to parsing\nclient input in later stages.\n",
+      "position": 2
+    },
+    {
+      "id": "8db3b652-eb27-4187-b94e-0be9b5141d86",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "echo",
+      "description_markdown_template": "In this stage, you'll respond to the\n[ECHO](https://redis.io/commands/echo) command.\n\nThe client will send you the command as a RESP array, which looks\nsomething like this:\n\n```\n*2\\r\\n$4\\r\\nECHO\\r\\n$3\\r\\nhey\\r\\n\n```\n\nSeems confusing? Read up about [sending commands to a Redis\nserver](https://redis.io/docs/reference/protocol-spec/#send-commands-to-a-redis-server).\n",
+      "position": 5
+    },
+    {
+      "id": "be936dce-f863-4441-953a-cf4ba1b043d1",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "concurrent-clients",
+      "description_markdown_template": "In this stage, your server will need to handle multiple concurrent\nclients. Just like the previous stages, all clients will only send `PING`\ncommands for now.\n\n{{#lang_is_javascript}}\nIn most languages, you'd need to either use threads or implement an\n[Event Loop](https://en.wikipedia.org/wiki/Event_loop) to do this. In JavaScript however, since [the concurrency\nmodel itself is based on an event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop), most\nstandard library functions are designed to support this kind of concurrent behaviour out of the box. **It is very\nlikely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nTo achieve this, you'll need to either use threads, or, if you're feeling\nadventurous, an [Event Loop](https://en.wikipedia.org/wiki/Event_loop) (like\nthe official Redis implementation does).\n{{/lang_is_javascript}}\n",
+      "position": 4
+    },
+    {
+      "id": "a44742f0-2121-4ae7-b68e-15bc04f13b19",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "set_get",
+      "description_markdown_template": "In this stage, you'll need to implement the [SET](https://redis.io/commands/set) &\n[GET](https://redis.io/commands/get) commands. For now, you can ignore all extra\noptions for `SET` and just implement the simple form: `SET key value`. You'll add support\nfor expiry in the next stage.\n",
+      "position": 6
+    },
+    {
+      "id": "0de30170-2ef7-4c8b-b6e9-8f20cf455b74",
+      "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
+      "slug": "expiry",
+      "description_markdown_template": "In this stage, you'll need to support setting a key with an expiry. The\nexpiry is provided using the \"PX\" argument to the\n[SET](https://redis.io/commands/set) command.\n\nThe tester will first send a `SET` command with an expiry, like this: `SET <key> <value> PX <expiry>`.\nThen, it will send a `GET` command to retrieve the value, like this: `GET <key>`. If the key has expired, the \ntester will expect a Null value as the response. Read about \"Null Bulk Strings\" \n[here](https://redis.io/docs/reference/protocol-spec/#resp-bulk-strings) to know how to send a Null value.\n\n{{#lang_is_haskell}}\nThe [time](https://hackage.haskell.org/package/time) package is available\nto use as a dependency.\n{{/lang_is_haskell}}\n",
+      "position": 7
+    },
+    {
+      "id": "65fb746e-bda3-486a-b7cf-1423f65e8f68",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "init",
+      "description_markdown_template": "In this stage, you'll implement one of SQLite's\n[dot-commands](https://www.sqlite.org/cli.html#special_commands_to_sqlite3_dot_commands_): `.dbinfo`. This\ncommand prints metadata about a SQLite database file.\n\nThe command is executed like this:\n\n```\n$ sqlite3 sample.db .dbinfo\n```\n\nIt prints output in this format:\n\n```\ndatabase page size:  4096\nwrite format:        1\nread format:         1\n\n...\n\nnumber of tables:    5\nschema size:         330\ndata version:        1\n```\n\nWe're only going to focus on one of these values: `database page size`. To find the page size, you'll need\nto read the [database header](https://www.sqlite.org/fileformat.html#the_database_header). \n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db .dbinfo\n```\n\nand here's the output it expects (the number will vary depending on the test database):\n\n```\ndatabase page size: 1024\n```\n",
+      "position": 1
+    },
+    {
+      "id": "5cf1c981-6d20-4a6f-bce8-170c79098e40",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "read_multiple_columns",
+      "description_markdown_template": "This stage is similar to the previous one, just that the tester will query for multiple columns instead of just\none.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db \"SELECT name, color FROM apples\"\n```\n\nand here's the output it expects:\n\n```\nGranny Smith|Light Green\nFuji|Red\nHoneycrisp|Blush Red\nGolden Delicious|Yellow\n```\n\nJust like in the previous stage, the order of rows doesn't matter.\n",
+      "position": 6
+    },
+    {
+      "id": "9c892c0d-a453-4c67-91ba-0467bf599386",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "where",
+      "description_markdown_template": "In this stage, you'll support filtering records using a `WHERE` clause.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db \"SELECT name, color FROM apples WHERE color = 'Yellow'\"\n```\n\nand here's the output it expects:\n\n```\nGolden Delicious|Yellow\n```\n\nFor now you can assume that the contents of the table are small enough to fit inside the root page. We'll deal\nwith tables that span multiple pages in the next stage.\n",
+      "position": 7
+    },
+    {
+      "id": "483df487-5941-42e3-818e-8929cf597ed3",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "table_names",
+      "description_markdown_template": "In this stage, you'll implement another dot-command:\n[`.tables`](https://www.sqlite.org/cli.html#special_commands_to_sqlite3_dot_commands_).\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db .tables\n```\n\nand here's the output it expects:\n\n```\napples   oranges\n```\n\nNotice how the table names are formatted with more than one space between each other? That's because `sqlite3`\nformats its output so that every value has a fixed-width. Your program doesn't need to mimic this behaviour. Using\njust one space as a separator should work. Both `apples oranges` and <code>apples &nbsp; oranges</code> will pass\nour tests.\n",
+      "position": 3
+    },
+    {
+      "id": "51f1fbee-25d8-461a-8f83-5ea473582afa",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "table_scan",
+      "description_markdown_template": "Time to play with larger amounts of data!\n\nIn this stage you'll deal with the same syntax as before: a query with a `WHERE` clause. However, this time, the\ntable you'll be querying will be larger and it'll span multiple pages.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh superheroes.db \"SELECT id, name FROM superheroes WHERE eye_color = 'Pink Eyes'\"\n```\n\nand here's the output it expects:\n\n```\n297|Stealth (New Earth)\n790|Tobias Whale (New Earth)\n1085|Felicity (New Earth)\n2729|Thrust (New Earth)\n3289|Angora Lapin (New Earth)\n3913|Matris Ater Clementia (New Earth)\n```\n\nThe tester is going to use a sample database of superheroes that is ~1MB in size. You can download a small\nversion of this to test locally, read the **Sample Databases** section in the **README** of your repository.\n\nYou'll need to traverse a [B-tree](https://en.wikipedia.org/wiki/B-tree) in this stage. If you're unfamiliar with\nhow B-trees work or just need a refresher, Vaidehi Joshi's\n[Busying Oneself With B-Trees](https://medium.com/basecs/busying-oneself-with-b-trees-78bbf10522e7) is a good place to\nstart. For specifics on how SQLite stores B-trees on disk, read the\n[B-tree Pages](https://www.sqlite.org/fileformat.html#b_tree_pages) documentation section.\n",
+      "position": 8
+    },
+    {
+      "id": "e4514b6d-1ca4-42e1-b109-5ca3ebfe7de9",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "table_count",
+      "description_markdown_template": "In this stage, you'll expand on the .dbinfo command from the last stage.\n\nIn the last stage we saw that the `.dbinfo` command prints output in this format:\n\n```\ndatabase page size:  4096\nwrite format:        1\nread format:         1\n\n...\n\nnumber of tables:    5\nschema size:         330\ndata version:        1\n```\n\nWe implemented `database page size` in the last stage. In this stage, we'll focus on another value: `number of tables`. \nTo find the number of tables, you'll need to count the number of rows in the\n[`sqlite_schema`](https://www.sqlite.org/fileformat.html#storage_of_the_sql_database_schema) table.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db .dbinfo\n```\n\nand here's the output it expects:\n\n```\ndatabase page size: 4096\nnumber of tables: 2\n```\n",
+      "position": 2
+    },
+    {
+      "id": "6004e582-58db-4b5b-8420-39e656513fdf",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "read_single_column",
+      "description_markdown_template": "Now that you're comfortable with jumping across database pages, let's dig a little deeper and read data from\nrows in a table.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db \"SELECT name FROM apples\"\n```\n\nand here's the output it expects:\n\n```\nGranny Smith\nFuji\nHoneycrisp\nGolden Delicious\n```\n\nThe order of rows returned doesn't matter.\n\nRows are stored on disk in the [Record Format](https://www.sqlite.org/fileformat.html#record_format), which is\njust an ordered sequence of values. To extract data for a single column, you'll need to know the order of that\ncolumn in the sequence. You'll need to parse the table's `CREATE TABLE` statement to do this. The `CREATE TABLE`\nstatement is stored in the [`sqlite_schema`](https://www.sqlite.org/schematab.html) table's `sql` column.\n\n{{#lang_is_python}}\nNot interested in implementing a SQL parser from scratch? [`sqlparse`](https://pypi.org/project/sqlparse/)\nis available as a dependency if you'd like to use it.\n{{/lang_is_python}}\n{{#lang_is_go}}\nNot interested in implementing a SQL parser from scratch? [`xwb1989/sqlparser`](https://github.com/xwb1989/sqlparser)\nis available as a dependency if you'd like to use it.\n{{/lang_is_go}}\n{{#lang_is_rust}}\nNot interested in implementing a SQL parser from scratch? The [`nom`](https://crates.io/crates/nom),\n[`peg`](https://crates.io/crates/peg) and [`regex`](https://crates.io/crates/regex) crates are available in\n`Cargo.toml` if you'd like to use them.\n{{/lang_is_rust}}\n",
+      "position": 5
+    },
+    {
+      "id": "232916bf-3e8e-4255-8941-5131389576dc",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "index_scan",
+      "description_markdown_template": "In this stage, we'll implement an index scan. Rather than reading _all_ rows in a table and then filtering\nin-memory, we'll use an index to perform a more intelligent search.\n\nTo test whether your implementation actually uses an index, the tester will use a database is ~1GB in size and\nexpect your program to return query results in less than 3 seconds.\n\nThe test database contains a `companies` table with an index named `idx_companies_country` on the\n`country` column.\n\nYou can download a small version of this database to test locally, read the **Sample Databases** section in the **README** \nof your repository for details.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh companies.db \"SELECT id, name FROM companies WHERE country = 'eritrea'\"\n```\n\nand here's the output it expects:\n\n```\n121311|unilink s.c.\n2102438|orange asmara it solutions\n5729848|zara mining share company\n6634629|asmara rental\n```\n\nYou can assume that all queries run by the tester will include `country` in the `WHERE` clause,\nso they can be served by the index. The tester will run multiple randomized queries and expect all of them\nto return results in under 3 seconds.\n",
+      "position": 9
+    },
+    {
+      "id": "025c9f76-29f2-4a58-94e7-1e9f0438b8c8",
+      "course_id": "9f231ffb-df5a-404a-9397-908a5caf41de",
+      "slug": "row_counts",
+      "description_markdown_template": "Now that you've gotten your feet wet with the [SQLite database file format](https://www.sqlite.org/fileformat.html),\nit's time to move on to actual SQL!\n\nIn this stage, your program will need to read the count of rows from a table.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_sqlite3.sh sample.db \"SELECT COUNT(*) FROM apples\"\n```\n\nand here's the output it expects:\n\n```\n4\n```\n\nYou'll need to read the table's row from the [`sqlite_schema`](https://www.sqlite.org/schematab.html) table and\nfollow the `rootpage` value to visit the page corresponding to the table. For now you can assume that the contents\nof the table are small enough to fit inside the root page. We'll deal with tables that span multiple pages in\nstage 7.\n\nRemember: You don't need to implement a full-blown SQL parser just yet. We'll get to that in the\nnext stages. For now you can just split the input by \" \" and pick the last item to get the table name.\n",
+      "position": 4
+    },
+    {
+      "id": "b426ec06-703b-40a2-9162-3a7d6b774e29",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "init",
+      "description_markdown_template": "Your task is to implement a very basic version \nof [`docker run`](https://docs.docker.com/engine/reference/run/)</a>. It will\nbe executed similar to `docker run`:\n\n```\nmydocker run ubuntu:latest /usr/local/bin/docker-explorer echo hey\n```\n\n[docker-explorer](https://github.com/codecrafters-io/docker-explorer) is a custom test program that exposes\ncommands like `echo` and `ls`.\n\nFor now, don't worry about pulling the `ubuntu:latest` image. We will just\nexecute a local program for this stage and print its output. You'll work on \npulling images from Docker Hub in stage 6.\n",
+      "position": 1
+    },
+    {
+      "id": "4cd6af74-f3b7-4c28-acc4-36c2374ef327",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "fs_isolation",
+      "description_markdown_template": "In the previous stage, we executed a program that existed locally on our\nmachine. This program had write access to the whole filesystem, which\nmeans that it could do **dangerous** things!\n\nIn this stage, you'll use [chroot](https://en.wikipedia.org/wiki/Chroot)\nto ensure that the program you execute doesn't have access to any files on\nthe host machine. Create an empty temporary directory and `chroot` into it\nwhen executing the command. You'll need to copy the binary being executed\ntoo.\n\n{{#lang_is_rust}}\nAt the time of writing this, the implementation of chroot in Rust's standard library\n([std::os::unix::fs::chroot](https://doc.rust-lang.org/std/os/unix/fs/fn.chroot.html)) is still a\nnightly-only experimental API. We've included [libc](https://crates.io/crates/libc) as a dependency\ninstead.\n{{/lang_is_rust}}\n\n{{#lang_is_nim}}\nSince Nim's [posix module](https://nim-lang.org/docs/posix.html) doesn't\nhave `chroot` defined, you'll need to implement this yourself! For\nexamples on how to do this, view the source for other syscalls like\n[chdir](https://nim-lang.org/docs/posix.html#chdir%2Ccstring).\n{{/lang_is_nim}}\n\n{{#lang_is_go}}\nWhen executing your program within the chroot directory, you might run into an error that says\n`open /dev/null: no such file or directory`. This is because [Cmd.Run()](https://golang.org/pkg/os/exec/#Cmd.Run)\nand its siblings expect `/dev/null` to be present. You can work around this by either creating an empty\n`/dev/null` file inside the chroot directory, or by ensuring that `Cmd.Stdout`, `Cmd.Stderr` and `Cmd.Stdin` are not `nil`.\nMore details about this [here](https://rohitpaulk.com/articles/cmd-run-dev-null).\n{{/lang_is_go}}\n\n{{#lang_is_rust}}\nWhen executing your program within the chroot directory, you might run into an error that says\n`no such file or directory` even if the binary exists within the chroot. This is because\n[Command::output()](https://doc.rust-lang.org/std/process/struct.Command.html#method.output)\nexpects `/dev/null` to be present. You can work around this by creating an empty\n`/dev/null` file inside the chroot directory. This cryptic error effects Go programs too, more details\n[here](https://rohitpaulk.com/articles/cmd-run-dev-null).\n{{/lang_is_rust}}\n\nJust like the previous stage, the tester will run your program like this:\n\n```\nmydocker run ubuntu:latest /usr/local/bin/docker-explorer ls /some_dir\n```\n",
+      "position": 4
+    },
+    {
+      "id": "d1cb1e63-953b-49ba-a55a-bdebdd306ed1",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "fetch_from_registry",
+      "description_markdown_template": "Your docker implementation can now execute a program with a fair degree of\nisolation - it can't modify files or interact with processes running on\nthe host.\n\nIn this stage, you'll use [the Docker registry\nAPI](https://docs.docker.com/registry/spec/api/) to fetch the contents of\na public image on [Docker Hub](https://hub.docker.com/) and then execute a\ncommand within it.\n\nYou'll need to:\n\n- Do a small [authentication dance](https://docs.docker.com/registry/spec/auth/token/)\n- Fetch the [image manifest](https://docs.docker.com/registry/spec/api/#pulling-an-image-manifest)\n- [Pull layers](https://docs.docker.com/registry/spec/api/#pulling-a-layer) of an image and extract them to the chroot directory\n\nThe base URL for Docker Hub's public registry is `registry.hub.docker.com`.\n\nThe tester will run your program like this:\n\n```\nmydocker run ubuntu:latest /bin/echo hey\n```\n\nThe image used will be an [official\nimage](https://docs.docker.com/docker-hub/official_images/) from Docker\nHub. For example: [`alpine:latest`](https://hub.docker.com/_/alpine),\n[`ubuntu:latest`](https://hub.docker.com/_/ubuntu),\n[`busybox:latest`](https://hub.docker.com/_/busybox). When interacting with the\nRegistry API, you'll need to prepend `library/` to the image names.\n\n{{#lang_is_rust}}\nSince Rust doesn't have an archive extraction utility in its stdlib, you\nmight want to shell out and use `tar`.\n\nYou can use the [reqwest](https://crates.io/crates/reqwest) crate to make\nHTTP requests, we've included it in the `Cargo.toml` file. We've also included\n[serde_json](https://crates.io/crates/serde_json) to help with parsing JSON.\n{{/lang_is_rust}}\n\n{{#lang_is_go}}\nSince Go doesn't have an archive extraction utility in its stdlib, you\nmight want to shell out and use `tar`.\n{{/lang_is_go}}\n\n{{#lang_is_nim}}\nSince Nim doesn't have an archive extraction utility in its stdlib, you\nmight want to shell out and use `tar`.\n{{/lang_is_nim}}\n\n{{#lang_is_c}}\nSince C doesn't have an archive extraction utility in its stdlib, you\nmight want to shell out and use `tar`.\n\nYou can assume that `libcurl` is available in the build environment.\n{{/lang_is_c}}\n",
+      "position": 6
+    },
+    {
+      "id": "4f167014-de09-4e22-b8b1-5c2939b9fe00",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "process_isolation",
+      "description_markdown_template": "In the previous stage, we guarded against malicious activity by\nrestricting an executable's access to the filesystem.\n\nThere's another resource that needs to be guarded: the process tree. The\nprocess you're executing is currently capable of viewing all other\nprocesses running on the host system, and sending signals to them.\n\nIn this stage, you'll use [PID\nnamespaces](http://man7.org/linux/man-pages/man7/pid_namespaces.7.html) to\nensure that the program you execute has its own isolated process tree.\nThe process being executed must see itself as PID 1.\n\n{{#lang_is_php}}\nYou'll need to use the `pcntl_unshare` function for this, which was\n[added in PHP 7.4](https://www.php.net/manual/en/migration74.new-functions.php), and isn't properly documented\nyet (as of 22 Jan 2021). Here's the [pull request](https://github.com/php/php-src/pull/3760) where it was added.\n{{/lang_is_php}}\n\nJust like the previous stage, the tester will run your program like this:\n\n```\nmydocker run ubuntu:latest /usr/local/bin/docker-explorer mypid\n```\n",
+      "position": 5
+    },
+    {
+      "id": "a6b6d762-e774-4927-b898-9935143c1c12",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "exit_code",
+      "description_markdown_template": "In this stage, you'll need to relay the program's exit code to the parent\nprocess.\n\nIf the program you're executing exits with exit code 1, your program\nshould exit with exit code 1 too.\n\nTo test this behaviour locally, you could use the `exit` command that\n`docker-explorer` exposes. Run `docker-explorer --help` to view usage.\n\nJust like the previous stage, the tester will run your program like this:\n\n```\nmydocker run ubuntu:latest /usr/local/bin/docker-explorer exit 1\n```\n",
+      "position": 3
+    },
+    {
+      "id": "9bccfadb-dc95-4d48-967b-3716194034fc",
+      "course_id": "aab5bf70-e65f-48f0-8c4d-980b0ed81017",
+      "slug": "stdio",
+      "description_markdown_template": "You'll now pipe the program's stdout and stderr to the\nparent process.\n\nLike the last stage, the tester will run your program like this:\n\n```\nmydocker run ubuntu:latest /usr/local/bin/docker-explorer echo hey\n```\n\nTo test this behaviour locally, you could use the `echo` + `echo_stderr`\ncommands that `docker-explorer` exposes. Run `docker-explorer --help` to\nview usage.\n\nIf you've got any logs or print statements in your code, make sure to remove\nthem. The tester can't differentiate between debug logs and the actual\noutput!\n\nNote: The **README** in your repository contains setup\ninformation for this stage and beyond (takes < 5 min).\n",
+      "position": 2
+    },
+    {
+      "id": "f2343fe1-384a-42f1-832e-98478002c327",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "match_digit",
+      "description_markdown_template": "In this stage, we'll implement support for the `\\d` \n[character class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Character_Classes).\n\n`\\d` matches any digit. \n\n**Example:** `\\d` should match \"3\", but not \"c\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"apple123\" | ./your_grep.sh -E \"\\d\"\n```\n\nYou program must exit with 0 if a digit is found in the string, and 1 if not.\n",
+      "position": 2
+    },
+    {
+      "id": "d22153ba-934f-4887-ac31-a0063462128c",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "wildcard",
+      "description_markdown_template": "In this stage, we'll add support for `.`, which matches any character.\n\n**Example**: `d.g` should match \"dog\", but not \"cog\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"dog\" | ./your_grep.sh -E \"d.g\"\n```\n\nYou program must exit with 0 if the input matches the given pattern, and 1 if not.\n",
+      "position": 11
+    },
+    {
+      "id": "15492e21-e35b-405d-a5b0-c4c029f00b14",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "combining_character_classes",
+      "description_markdown_template": "In this stage, we'll add support for patterns that combine the character classes we've seen so far. \n\nThis is where your regex matcher will start to _feel_ useful. \n\nKeep in mind that this stage is harder than the previous ones. You'll likely need to rework your \nimplementation to process user input character-by-character instead of the whole line at once. \n\nWe recommend taking a look at the example code in [\"A Regular Expression Matcher\"](https://www.cs.princeton.edu/courses/archive/spr09/cos333/beautiful.html) \nby Rob Pike to guide your implementation.\n\n**Examples:** \n\n- `\\d apple` should match \"1 apple\", but not \"1 orange\".\n- `\\d\\d\\d apple` should match \"100 apples\", but not \"1 apple\".\n- `\\d \\w\\w\\ws` should match \"3 dogs\" and \"4 cats\" but not \"1 dog\" (because the \"s\" is not present at the end).\n\nYour program will be executed like this: \n\n```bash\n$ echo \"1 apple\" | ./your_grep.sh -E \"\\d apple\"\n```\n\nYou program must exit with 0 if the pattern matches the input, and 1 if not.\n",
+      "position": 6
+    },
+    {
+      "id": "58c7438c-0409-4fe0-9427-78f95a07a999",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "start_of_string_anchor",
+      "description_markdown_template": "In this stage, we'll add support for `^`, the [Start of String or Line anchor](https://docs.microsoft.com/en-us/dotnet/standard/base-types/anchors-in-regular-expressions#start-of-string-or-line-). \n\n`^` doesn't match a character, it matches the start of a line.\n\n**Example:** `^log` should match \"log\", but not \"slog\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"log\" | ./your_grep.sh -E \"^log\"\n```\n\nYou program must exit with 0 if the input starts with the given pattern, and 1 if not.\n",
+      "position": 7
+    },
+    {
+      "id": "09580fee-1e2b-400e-840b-15bb9ed790eb",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "init",
+      "description_markdown_template": "In this stage, we'll handle the simplest regex possible: a single character. \n\n**Example:** `a` should match \"apple\", but not \"dog\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"apple\" | ./your_grep.sh -E \"a\"\n```\n\nThe `-E` flag instructs `grep` to interprets patterns as extended regular expressions (with support \nfor metacharacters like `+`, `?` etc.). We'll use this flag in all stages.\n\nYou program must [exit](https://en.wikipedia.org/wiki/Exit_status) with 0 if the character is found, and 1 if not.\n",
+      "position": 1
+    },
+    {
+      "id": "7b9d6359-956b-4c58-ae92-357cc89af38a",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "end_of_string_anchor",
+      "description_markdown_template": "In this stage, we'll add support for `$`, the [End of String or Line anchor](https://docs.microsoft.com/en-us/dotnet/standard/base-types/anchors-in-regular-expressions#start-of-string-or-line-).\n\n`$` doesn't match a character, it matches the end of a line.\n\n**Example:** `dog$` should match \"dog\", but not \"dogs\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"dog\" | ./your_grep.sh -E \"dog$\"\n```\n\nYou program must exit with 0 if the input matches the given pattern, and 1 if not.\n",
+      "position": 8
+    },
+    {
+      "id": "a731c89b-fd0e-441b-bfbd-b53ceebf2257",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "alternation",
+      "description_markdown_template": "In this stage, we'll add support for the `|` keyword, which allows combining multiple patterns in an either/or fashion.\n\n**Example**: `(cat|dog)` should match \"dog\" and \"cat\", but not \"apple\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"cat\" | ./your_grep.sh -E \"(cat|dog)\"\n```\n\nYou program must exit with 0 if the input matches the given pattern, and 1 if not.\n",
+      "position": 12
+    },
+    {
+      "id": "cd5368fb-eadc-4647-a5c6-f6ca4a619054",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "zero_or_one_quantifier",
+      "description_markdown_template": "In this stage, we'll add support for `?`, the [zero or one](https://docs.microsoft.com/en-us/dotnet/standard/base-types/quantifiers-in-regular-expressions#match-one-or-more-times-) quantifier (also known as the \"optional\" quantifier).\n\n**Example**: `dogs?` should match \"dogs\" and \"dog\", but not \"cat\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"dogs\" | ./your_grep.sh -E \"dogs?\"\n```\n\nYou program must exit with 0 if the input matches the given pattern, and 1 if not.\n",
+      "position": 10
+    },
+    {
+      "id": "1231115b-c640-4926-8f37-55ace724e9aa",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "one_or_more_quantifier",
+      "description_markdown_template": "In this stage, we'll add support for `+`, the [one or more](https://docs.microsoft.com/en-us/dotnet/standard/base-types/quantifiers-in-regular-expressions#match-one-or-more-times-) quantifier.\n\n**Example**: `a+` should match \"apple\" and \"SaaS\", but not \"dog\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"caats\" | ./your_grep.sh -E \"ca+ts\"\n```\n\nYou program must exit with 0 if the input matches the given pattern, and 1 if not.\n",
+      "position": 9
+    },
+    {
+      "id": "aef8cfc2-3b69-4465-838d-ed35c77899e4",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "match_alphanumeric",
+      "description_markdown_template": "In this stage, we'll implement support for the `\\w` \n[character class](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Character_Classes).\n\n`\\w` matches any alphanumeric character (`a-z`, `A-Z`, `0-9`, `_`).\n\n**Example:** `\\w` should match \"foo101\", but not \"$!?\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"alpha-num3ric\" | ./your_grep.sh -E \"\\w\"\n```\n\nYou program must exit with 0 if an alphanumeric character is found in the string, and 1 if not.\n",
+      "position": 3
+    },
+    {
+      "id": "7febb4fb-355a-4062-a633-6bc83aafb4f8",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "negative_character_groups",
+      "description_markdown_template": "In this stage, we'll add support for [negative character groups](https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#negative-character-group-).\n\nNegative character groups match any character that is not present within a pair of square brackets.\n\n**Example:** `[^abc]` should match \"dog\", but not \"cab\" (since all characters are either \"a\", \"b\" or \"c\").\n\nYour program will be executed like this: \n\n```bash\n$ echo \"apple\" | ./your_grep.sh -E \"[^abc]\"\n```\n\nYou program must exit with 0 if the input contains characters that aren't part of the negative character group, and 1 if not.\n",
+      "position": 5
+    },
+    {
+      "id": "bf84258c-f1f2-411a-8a98-0024cb24c76f",
+      "course_id": "caeb08ee-bcf5-408c-9380-3a845342372e",
+      "slug": "positive_character_groups",
+      "description_markdown_template": "In this stage, we'll add support for [positive character groups](https://docs.microsoft.com/en-us/dotnet/standard/base-types/character-classes-in-regular-expressions#positive-character-group--).\n\nPositive character groups match any character that is present within a pair of square brackets.\n\n**Example:** `[abc]` should match \"apple\", but not \"dog\".\n\nYour program will be executed like this: \n\n```bash\n$ echo \"apple\" | ./your_grep.sh -E \"[abc]\"\n```\n\nYou program must exit with 0 if an any of the characters are found in the string, and 1 if not.\n",
+      "position": 4
+    },
+    {
+      "id": "1250bd0d-cefc-4586-95fc-85c1bb28ef31",
+      "course_id": "d5a57f8f-0b0d-4033-926c-751b770cb968",
+      "slug": "init",
+      "description_markdown_template": "TODO: Add description\n",
+      "position": 1
+    },
+    {
+      "id": "ad699f4d-93ab-43cd-ae6c-6631df542315",
+      "course_id": "d5a57f8f-0b0d-4033-926c-751b770cb968",
+      "slug": "respond_with_404",
+      "description_markdown_template": "This is an updpated description for the stage\n",
+      "position": 2
+    },
+    {
+      "id": "1ad5c4c0-d865-4858-835b-b0d781f2cb40",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-string",
+      "description_markdown_template": "[Bencode](https://en.wikipedia.org/wiki/Bencode) (pronounced *Bee-encode*) is a serialization format used in [the BitTorrent protocol](https://www.bittorrent.org/beps/bep_0003.html). It is used in torrent files and in communication between trackers and peers.\n\nBencode supports four data types:\n- strings\n- integers\n- arrays\n- dictionaries\n\nIn this stage, we'll focus on decoding strings.\n\nStrings are encoded as `<length>:<contents>`. For example, the string `\"hello\"` is encoded as `\"5:hello\"`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode 5:hello\n\"hello\"\n```\n",
+      "position": 1
+    },
+    {
+      "id": "2237fd98-cf05-4d66-b0ba-5f66d8808a09",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-int",
+      "description_markdown_template": "In this stage, you’ll decode a bencoded integer value.\n\nIntegers are encoded as `i<number>e`. For example, `52` is encoded as `i52e` and `-52` is encoded as `i-52e`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode i52e\n52\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "position": 2
+    },
+    {
+      "id": "ae525d04-d1b6-4920-b762-581db14179f1",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-list",
+      "description_markdown_template": "In this stage, you’ll decode a bencoded list value.\n\nLists are encoded as `l<bencoded_elements>e`.\n\nFor example, `[\"hello\", 52]` would be encoded as `l5:helloi52ee`. Note that there are no separators between the elements.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode l5:helloi52ee\n[“hello”,52]\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "position": 3
+    },
+    {
+      "id": "b1e2f4f6-be98-4b0f-9f49-064ddefacb6f",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "handshake",
+      "description_markdown_template": "In this stage, you’ll establish a TCP connection with a peer and complete a handshake.\n\nThe handshake is a message consisting of the following parts as described in the [peer protocol](https://www.bittorrent.org/beps/bep_0003.html#peer-protocol):\n\n1. length of the protocol string (BitTorrent protocol) which is `19`\n2. the string `BitTorrent protocol`\n3. eight reserved bytes, which are all set to zero\n4. 20 byte sha1 infohash\n5. 20 byte peer id (you can use `00112233445566778899` for this challenge)\n\nAfter we send a handshake to our peer, we should receive a handshake back in the same format.\n\nYour program should print the hexadecimal representation of the peer id you've received during the handshake.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh handshake sample.torrent <peer_ip>:<peer_port>\n```\nand here’s the output it expects:\n```\nPeer ID: 0102030405060708090a0b0c0d0e0f1011121314\n```\n\n**Note**: To get a peer IP & port to test this locally, run `./your_bittorrent.sh peers sample.torrent` and pick any peer from the list.\n",
+      "position": 9
+    },
+    {
+      "id": "e79deec9-971f-424f-8581-5c8aaf170e80",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "dl-piece",
+      "description_markdown_template": "In this stage, you'll download one piece and save it to disk. In the next stage we'll combine these pieces into a file.\n\nTo download a piece, your program will need to need to send [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to a peer. The overall flow looks like this:\n\n- Read the torrent file to get the tracker URL\n    - you've done this in previous stages\n- Perform the tracker GET request to get a list of peers\n    - you've done this in previous stages\n- Establish a TCP connection with a peer, and perform a handshake\n    - you've done this in previous stages\n- Exchange multiple [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to download the file\n    - **This is the part you'll implement in this stage**\n\n### Peer Messages\n\nPeer messages consist of a message length prefix (4 bytes), message id (1 byte) and a payload (variable size).\n\nHere are the peer messages you'll need to exchange once the handshake is complete:\n\n- Wait for a `bitfield` message from the peer indicating which pieces it has\n    - The message id for this message is `5`.\n    - You can ignore the payload for now, the tracker we use for this challenge ensures that all peers have all pieces available.\n- Send an `interested` message\n    - The message id for `interested` is `2`.\n    - The payload for this message is empty.\n- Wait until you receive an `unchoke` message back\n    - The message id for `unchoke` is `1`.\n    - The payload for this message is empty.\n- Break the piece into blocks of 16 kiB (16 * 1024 bytes) and send a `request` message for each block\n    - The message id for `request` is `6`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n            - This'll be `0` for the first block, `2^14` for the second block, 2*2^14 for the third block etc.\n        - `length`: set this to `2^14` (16 * 1024)\n- Wait for a `piece` message for each block you've requested\n    - The message id for `piece` is `7`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n        - `block`: the data for the piece, usually `2^14` bytes long\n\nAfter receiving blocks and combining them into pieces, you'll want to check the integrity of each piece by comparing it's hash\nwith the piece hash value found in the torrent file.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh download_piece -o /tmp/test-piece-0 sample.torrent 0\n```\nand here’s the output it expects:\n```\nPiece 0 downloaded to /tmp/test-piece-0.\n```\n\n**Optional:** To improve download speeds, you can consider pipelining your requests. [BitTorrent Economics Paper](http://bittorrent.org/bittorrentecon.pdf) recommends having 5 requests pending at once, to avoid a delay between blocks being sent.\n",
+      "position": 10
+    },
+    {
+      "id": "ec276239-df14-4b6d-9fcb-f69fa920bd05",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "infohash",
+      "description_markdown_template": "Info hash is a unique identifier for a torrent file. It's used when talking to trackers or peers.\n\nIn this stage, you'll calculate the info hash for a torrent file and print it in hexadecimal format.\n\nTo calculate the info hash, you'll need to:\n\n- Extract the `info` dictionary from the torrent file\n- Bencode the contents of the `info` dictionary, and calculate the SHA-1 hash\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\nand here’s the output it expects:\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\nInfo Hash: c77829d2a77d6516f88cd7a3de1a26abcbfab0db\n```\n",
+      "position": 6
+    },
+    {
+      "id": "8cd1efd2-bd2a-4080-af49-9c46c3b8a095",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "parse-torrent",
+      "description_markdown_template": "In this stage, you'll parse a torrent file and print information about the torrent.\n\nA torrent file (also known as a [metainfo file](https://www.bittorrent.org/beps/bep_0003.html#metainfo-files)) contains a bencoded dictionary with the following values:\n\n- `announce`:\n    - URL to a \"tracker\", which is a central server that keeps track of peers participating in the sharing of a torrent.\n- `info`:\n    - A dictionary with keys:\n        - `length`: size of the file in bytes, for single-file torrents\n        - `name`: suggested name to save the file / directory as\n        - `piece length`: number of bytes in each piece\n        - `pieces`: concatenated SHA-1 hashes of each piece\n\n**Note**: The `info` dictionary looks slightly different for multi-file torrents. For this challenge, we'll only implement support for single-file torrents.\n\nIn this stage, we'll focus on extracting the tracker URL and the length of the file (in bytes).\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\n\nand here’s the output it expects:\n\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\n```\n",
+      "position": 5
+    },
+    {
+      "id": "ed9b114e-6bf8-4bf0-bcc9-9fd70db0e90f",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "hashes",
+      "description_markdown_template": "In a torrent, a file is split into equally-sized parts called **pieces**. A piece is usually 256 KB or 1 MB in size.\n\nEach piece is assigned a SHA-1 hash value. On public networks, there may be malicious peers that send fake data. These hash values allow us to verify the integrity of each piece that we'll download.\n\nPiece length and piece hashes are specified in the `info` dictionary of the torrent file under the following keys:\n\n- `piece length`: number of bytes in each piece, an integer\n- `pieces`: concatenated SHA-1 hashes of each piece (20 bytes each), a string\n\nThe [BitTorrent Protocol Specification](https://www.bittorrent.org/beps/bep_0003.html#info-dictionary) has more information about these keys.\n\nIn this stage, the tester will expect your program to print piece length and a list of piece hashes in hexadecimal format.\n\nHere's how the tester will execute your program:\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\nand here's the output it expects:\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\nInfo Hash: c77829d2a77d6516f88cd7a3de1a26abcbfab0db\nPiece Length: 262144\nPiece Hashes:\nddf33172599fda84f0a209a3034f79f0b8aa5e22\n795a618a1ee5275e952843b01a56ae4e142752ef\ncdae2ef532d611a46b2cf7b64d578c09b3ac0b6e\n098dadc0c19436f1927ea27b90eb18b1a2820a23\n```\n",
+      "position": 7
+    },
+    {
+      "id": "44575f40-7c51-4af5-a008-92a83d73bd6a",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "dl-file",
+      "description_markdown_template": "In this stage, you’ll download the entire file and save it to disk.\n\nYou can start with using a single peer to download all the pieces. You’ll need to download all the pieces, verify their integrity using piece hashes, and combine them to assemble the file.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh download -o /tmp/test.txt sample.torrent\n```\nand here’s the output it expects:\n```\nDownloaded test.torrent to /tmp/test.txt.\n```\n\n**Optional:** To improve download speeds, you can download from multiple peers at once. You could have a work queue consisting of each piece that needs to be downloaded. Your worker (connection with a peer) could pick a piece from the work queue, attempt to download it, check the integrity, and write the downloaded piece into a buffer. Any failure (network issue, hashes not matching, peer not having the piece etc.) would put the piece back into the work queue to be tried again.\n",
+      "position": 11
+    },
+    {
+      "id": "4110e0c6-3bf2-4d2b-b2c1-0c5d5e4900eb",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-dict",
+      "description_markdown_template": "In this stage, you’ll decode a bencoded dictionary value.\n\nA dictionary is encoded as `d<key1><value1>...<keyN><valueN>e`. `<key1>`, `<value1>` etc. correspond to the bencoded keys & values. The keys are sorted in lexicographical order.\n\nFor example, `{\"hello\": 52, \"foo\":\"bar\"}` would be encoded as: `d3:foo3:bar5:helloi52ee` (note that the keys were reordered).\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode d3:foo3:bar5:helloi52ee\n{\"foo\":\"bar\",\"hello\":52}\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "position": 4
+    },
+    {
+      "id": "4ee2eb6b-8402-4344-996b-fb73f1c24afb",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "peers",
+      "description_markdown_template": "Trackers are central servers that maintain information about peers participating in the sharing and downloading of a torrent.\n\nIn this stage, you'll make a GET request to a HTTP tracker to discover peers to download the file from.\n\n### Tracker GET request\n\nYou'll need to make a request to the tracker URL you extracted in the previous stage, and include these query params:\n\n- `info_hash`: the info hash of the torrent\n    - 20 bytes long, will need to be URL encoded\n    - **Note**: this is **NOT** the hexadecimal representation, which is 40 bytes long\n- `peer_id`: a unique identifier for your client\n    - For the purposes of this challenge, it doesn't matter what you set this to.\n    - You can use `00112233445566778899`.\n- `port`: the port your client is listening on\n    - For the purposes of this challenge, it doesn't matter what you set this to.\n    - You can use `6881`.\n- `uploaded`: the total amount uploaded so far\n    - Since your client hasn't uploaded anything yet, you can set this to `0`.\n- `downloaded`: the total amount downloaded so far\n    - Since your client hasn't downloaded anything yet, you can set this to `0`.\n- `left`: the number of bytes left to download\n    - Since you client hasn't downloaded anything yet, this'll be the total length of the file (you've extracted this value from the torrent file in previous stages)\n- `compact`: whether the peer list should use the [compact representation](https://www.bittorrent.org/beps/bep_0023.html)\n    - For the purposes of this challenge, set this to `1`.\n    - The compact representation is more commonly used in the wild, the non-compact representation is mostly supported for backward-compatibility.\n\nRead [the BitTorrent Protocol Specification](https://www.bittorrent.org/beps/bep_0003.html#trackers) for more information about these query parameters.\n\n### Tracker response\n\nThe tracker's response will be a bencoded dictionary with two keys:\n\n- `interval`:\n    - An integer, indicating how often your client should make a request to the tracker.\n    - You can ignore this value for the purposes of this challenge.\n- `peers`.\n    - A string, which contains list of peers that your client can connect to.\n    - Each peer is represented using 6 bytes. The first 4 bytes are the peer's IP address and the last 2 bytes are the peer's port number.\n\n---\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh peers sample.torrent\n```\nand here’s the output it expects:\n```\n188.119.61.177:6881\n71.224.0.29:51414\n62.153.208.98:3652\n```\n",
+      "position": 8
+    }
+  ]
+}

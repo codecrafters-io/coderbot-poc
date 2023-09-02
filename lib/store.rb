@@ -16,6 +16,10 @@ class Store
     @models_map[model.class][model.id] = model
   end
 
+  def clear
+    @models_map = self.class.model_classes.map { |model_class| [model_class, {}] }.to_h
+  end
+
   def fetch_all
     response = HTTParty.get("https://backend.codecrafters.io/api/v1/courses?include=stages")
     parsed_response = JSON.parse(response.body)
@@ -49,5 +53,10 @@ class Store
 
   def models_for(model_class)
     @models_map[model_class].values
+  end
+
+  def persist(path)
+    FileUtils.mkdir_p(File.dirname(path)) unless Dir.exist?(File.dirname(path))
+    File.write(path, JSON.pretty_generate(@models_map.transform_values { |models| models.values.map(&:serializable_hash) }))
   end
 end

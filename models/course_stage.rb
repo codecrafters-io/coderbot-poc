@@ -1,5 +1,6 @@
 class CourseStage
   include ActiveModel::Model
+  include ActiveModel::Serialization
 
   attr_accessor :id
   attr_accessor :course_id
@@ -12,4 +13,14 @@ class CourseStage
   validates_presence_of :slug
   validates_presence_of :description_markdown_template
   validates_presence_of :position
+
+  def attributes
+    {
+      "id" => nil,
+      "course_id" => nil,
+      "slug" => nil,
+      "description_markdown_template" => nil,
+      "position" => nil
+    }
+  end
 end
