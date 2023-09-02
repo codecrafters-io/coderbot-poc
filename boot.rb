@@ -8,4 +8,5 @@ require "active_model"
 loader = Zeitwerk::Loader.new
 loader.push_dir("#{__dir__}/lib")
 loader.push_dir("#{__dir__}/models")
+loader.push_dir("#{__dir__}/prompts")
 loader.setup

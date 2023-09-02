@@ -8,8 +8,7 @@ class TestPrompt
       parameters: {
         model: "gpt-4",
         messages: [
-          {role: "system", content: system_message(context.solution, context.chunk)},
-          {role: "user", content: user_message(context.solution, context.chunk)}
+          {role: "system", content: system_message}
         ],
         temperature: 0
       }
@@ -20,59 +19,79 @@ class TestPrompt
 
   protected
 
-  def format_diff(diff)
-    diff.lines.each_with_index.map { |line, index| "#{index + 1}: #{line}" }.join
-  end
+  # def format_diff(diff)
+  #   diff.lines.each_with_index.map { |line, index| "#{index + 1}: #{line}" }.join
+  # end
 
-  def system_message(solution, chunk)
+  def system_message
     <<~PROMPT
-      You are an assistant to a coding tutor. They're teaching a hands-on course called "#{solution.course_stage.course.name}".
+      You are a brilliant and meticulous engineer assigned to write code to pass stage #{context.stage.position} of the "#{context.course.name}" programming course.
 
-      The markdown description of the course is available in markdown delimited by triple backticks below:
-
-      ```
-      #{solution.course_stage.course.description_markdown}
-      ```
-
-      The course has multiple modules, and the current module is "#{solution.course_stage.name}".
-
-      The instructions for this module are available in markdown delimited by triple backticks below:
+      The description of the course is available in markdown delimited by triple backticks below:
 
       ```
-      #{solution.course_stage.description_markdown_for_repository(solution.repository)}
+      #{context.course.description_markdown}
       ```
 
-      The user is asking you to help them explain part of solution in #{solution.language.name} to a student.
+      The course has multiple stages, and the current stage is "#{context.stage.name}".
 
-      Break the solution down into multiple chunks, and explain each chunk separately. Only explain chunks where
-      lines were added/removed, don't explain lines that haven't changed. When multiple changed lines are present
-      next to each other, explain them together, not one by one. Don't mention line numbers in your explanations.
+      The instructions for this stage are available in markdown delimited by triple backticks below:
 
-      Be friendly, and don't sound overconfident. Assume that the student isn't very familiar with #{solution.language.name}.
+      ```
+      #{context.stage.description_markdown_template}
+      ```
 
-      Be concise. Don't prefix your answer with "Sure!" or "Okay!" and don't say things like "I'll explain this solution step by
-      step". Just skip to the explanation directly.
+      The user is asking you to help them edit their code to pass this stage. The user's code is listed below delimited by triple backticks:
 
-      Don't mention the course name or the module name.
-    PROMPT
-  end
+      ```python
+      import json
+      import sys
 
-  def user_message(solution, chunk)
-    changed_file = solution.changed_file(chunk["filename"])
-    line_description = chunk["start_line"].eql?(chunk["end_line"]) ? "line #{chunk["start_line"]}" : "lines #{chunk["start_line"]}-#{chunk["end_line"]}"
+      # import bencodepy - available if you need it!
+      # import requests - available if you need it!
 
-    <<~PROMPT
-      Here's are the diffs in the solution I'm looking at (there are #{solution.changed_files.count} files with changes):
+      # Examples:
+      #
+      # - decode_bencode("5:hello") -> "hello"
+      # - decode_bencode("10:hello12345") -> "hello12345"
+      def decode_bencode(bencoded_value):
+          if chr(bencoded_value[0]).isdigit():
+              length = int(bencoded_value.split(b":")[0])
+              return bencoded_value.split(b":")[1][:length]
+          else:
+              raise NotImplementedError("Only strings are supported at the moment")
 
-      The diff for file `#{changed_file["filename"]}` is delimited by triple backticks below: \n\n```\n#{format_diff(changed_file["diff"])}\n```
 
-      Explain #{line_description} of diff for file #{chunk["filename"]}. Limit your response to 150 words, summarize the
-      changes if needed to fit within 150 words. Don't mention the filename in your response.
+      def main():
+          command = sys.argv[1]
 
-      IMPORTANT: Do NOT mention line numbers in your response. Include code blocks if your need to refer to specific parts of the diff.
-      IMPORTANT: Only explain #{line_description}, don't explain other parts of the diff.
+          # You can use print statements as follows for debugging, they'll be visible when running tests.
+          print("Logs from your program will appear here!")
 
-      Format your reponse as markdown.
+          if command == "decode":
+              bencoded_value = sys.argv[2].encode()
+
+              # json.dumps() can't handle bytes, but bencoded "strings" need to be
+              # bytestrings since they might contain non utf-8 characters.
+              #
+              # Let's convert them to strings for printing to the console.
+              def bytes_to_str(data):
+                  if isinstance(data, bytes):
+                      return data.decode()
+
+                  raise TypeError(f"Type not serializable: {type(data)}")
+
+              # Uncomment this block to pass the first stage
+              # print(json.dumps(decode_bencode(bencoded_value), default=bytes_to_str))
+          else:
+              raise NotImplementedError(f"Unknown command {command}")
+
+
+      if __name__ == "__main__":
+          main()
+      ```
+
+      Fix the user's code so that it passes the stage.
     PROMPT
   end
 end

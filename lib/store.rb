@@ -40,7 +40,8 @@ class Store
       Course.new(
         id: course_data["id"],
         slug: course_data["attributes"]["slug"],
-        description_markdown: course_data["attributes"]["description-markdown"]
+        description_markdown: course_data["attributes"]["description-markdown"],
+        name: course_data["attributes"]["name"]
       ).tap(&:validate!)
     end
 
@@ -54,7 +55,8 @@ class Store
         description_markdown_template: stage_data["attributes"]["description-markdown-template"],
         id: stage_data["id"],
         position: stage_data["attributes"]["position"],
-        slug: stage_data["attributes"]["slug"]
+        slug: stage_data["attributes"]["slug"],
+        name: stage_data["attributes"]["name"]
       ).tap(&:validate!)
     end
 
