@@ -1,16 +1,20 @@
 require_relative "boot"
 
+course_slug = ARGV[0]
+stage_position = ARGV[1].to_i
+repository_dir = ARGV[2]
+
 Store.instance.load_from_file("fixtures/store.json")
 
-course = Store.instance.models_for(Course).detect { |course| course.slug == "bittorrent" }
+course = Store.instance.models_for(Course).detect { |course| course.slug == course_slug }
 stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
-first_stage = stages.min_by(&:position)
+first_stage = stages.detect { |stage| stage.position == stage_position }
 
 counter = 0
 
 loop do
-  current_code = File.read("current_repository/app/main.py")
-  test_runner_output = TestRunner.new("current_repository").run_tests
+  current_code = File.read("#{repository_dir}/app/main.py")
+  test_runner_output = TestRunner.new(repository_dir).run_tests
 
   if test_runner_output.passed?
     puts ""
@@ -51,5 +55,5 @@ loop do
   Diffy::Diff.default_format = :color
   puts Diffy::Diff.new(current_code, edited_code, context: 2)
 
-  File.write("current_repository/app/main.py", edited_code)
+  File.write("#{repository_dir}/app/main.py", edited_code)
 end
