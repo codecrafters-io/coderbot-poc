@@ -5,3 +5,8 @@ run_stage_1_bittorrent:
 	git -C test_repositories/bittorrent reset --hard
 	git -C test_repositories/bittorrent clean -fd
 	bundle exec ruby main.rb bittorrent 1 test_repositories/bittorrent
+
+run_stage_1_redis:
+	git -C test_repositories/redis reset --hard
+	git -C test_repositories/redis clean -fd
+	bundle exec ruby main.rb redis 1 test_repositories/redis

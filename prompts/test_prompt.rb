@@ -56,7 +56,9 @@ class TestPrompt
 
       Fix the user's code so that it passes the stage.
 
-      * Always prefer the least amount of changes possible, but ensure the solution is complete
+      Here are some rules to follow:
+
+      * Try to keep your changes minimal, but ensure the solution is complete
       * Don't remove comments unless they are incorrect
       * You can remove debug statements if you think they're unnecessary to pass the stage
     PROMPT
