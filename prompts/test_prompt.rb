@@ -58,9 +58,14 @@ class TestPrompt
 
       Here are some rules to follow:
 
-      * Try to keep your changes minimal, but ensure the solution is complete
-      * Don't remove comments unless they are incorrect
-      * You can remove debug statements if you think they're unnecessary to pass the stage
+      * Try to keep your changes minimal, but ensure the solution is complete.
+      * Add comments to explain your changes, and don't remove existing comments unless they're incorrect or outdated.
+      * You can remove debug print statements if you think they're unnecessary to pass the stage.
+      * If you see obvious mistakes, fix them. The user is a beginner, so their code might contain mistakes that you wouldn't typically make.
+      * Try to simplify code where possible, don't overcomplicate things. If a block of code looks too convoluted, it's probably wrong and needs to be redone.
+      * Write production quality code that you think would be acceptable in a real world codebase. Don't write code that you think is hacky and only passes the current stage, unless the stage instructions mention otherwise.
+      * Be wary of code duplication, you might be able to solve the problem better by using recursion or re-using another function.
+      * Print the FULL contents of the file delimited by triple backticks. Don't print partial contents of the file.
     PROMPT
   end
 end

@@ -16,20 +16,35 @@ generate_fixtures:
 # 	git -C test_repositories/git clean -fd
 # 	bundle exec ruby main.rb git 1 test_repositories/git
 
-run_stage_2_redis:
+# run_stage_2_redis:
+# 	git -C test_repositories/redis reset --hard
+# 	git -C test_repositories/redis clean -fd
+# 	bundle exec ruby main.rb redis 2 test_repositories/redis
+
+# run_stage_2_bittorrent:
+# 	git -C test_repositories/bittorrent reset --hard
+# 	git -C test_repositories/bittorrent clean -fd
+# 	bundle exec ruby main.rb bittorrent 2 test_repositories/bittorrent
+
+# run_stage_2_git:
+# 	git -C test_repositories/git reset --hard
+# 	git -C test_repositories/git clean -fd
+# 	bundle exec ruby main.rb git 2 test_repositories/git
+
+run_stage_3_redis:
 	git -C test_repositories/redis reset --hard
 	git -C test_repositories/redis clean -fd
-	bundle exec ruby main.rb redis 2 test_repositories/redis
+	bundle exec ruby main.rb redis 3 test_repositories/redis
 
-run_stage_2_bittorrent:
+run_stage_3_bittorrent:
 	git -C test_repositories/bittorrent reset --hard
 	git -C test_repositories/bittorrent clean -fd
-	bundle exec ruby main.rb bittorrent 2 test_repositories/bittorrent
+	bundle exec ruby main.rb bittorrent 3 test_repositories/bittorrent
 
-run_stage_2_git:
+run_stage_3_git:
 	git -C test_repositories/git reset --hard
 	git -C test_repositories/git clean -fd
-	bundle exec ruby main.rb git 2 test_repositories/git
+	bundle exec ruby main.rb git 3 test_repositories/git
 
 git_diff:
 	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} diff
