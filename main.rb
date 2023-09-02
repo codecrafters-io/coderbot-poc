@@ -15,7 +15,14 @@ loop do
   break if test_runner_output.passed?
 
   counter += 1
+
+  puts "-------------------"
   puts "Attempt #{counter}!"
+  puts "-------------------"
+  puts ""
+
+  puts "Logs:"
+  puts ""
 
   puts test_runner_output.last_stage_logs
 
@@ -29,7 +36,6 @@ loop do
   edited_code = result.scan(/```python\n(.*?)```/m).join("\n")
 
   puts "Diff:"
-  puts ""
   puts ""
 
   Diffy::Diff.default_format = :color
