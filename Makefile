@@ -46,6 +46,9 @@ run_stage_3_git:
 	git -C test_repositories/git clean -fd
 	bundle exec ruby main.rb git 3 test_repositories/git
 
+git_reset:
+	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} reset --hard
+
 git_diff:
 	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} diff
 
