@@ -49,6 +49,8 @@ class TestPrompt
       ```
 
       Fix the user's code so that it passes the stage.
+
+      * Always prefer the least amount of changes possible, but ensure the solution is complete
     PROMPT
   end
 end
