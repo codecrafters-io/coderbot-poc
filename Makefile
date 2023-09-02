@@ -1,4 +1,4 @@
-generate_stage_instruction_fixtures:
+generate_fixtures:
 	bundle exec ruby scripts/generate_stage_instruction_fixtures.rb
 
 run_stage_1:
