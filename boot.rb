@@ -1,5 +1,8 @@
-require 'bundler'
+require "bundler"
 Bundler.require
+
+require "active_support/all"
+require "active_model"
 
 # Autoload all files in ./lib
 loader = Zeitwerk::Loader.new
