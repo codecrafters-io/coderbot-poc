@@ -48,6 +48,12 @@ class TestPrompt
       #{context.original_code}
       ```
 
+      When they submitted their code, they saw the following error delimited by triple backticks below:
+
+      ```
+      #{context.test_runner_output.last_stage_logs}
+      ```
+
       Fix the user's code so that it passes the stage.
 
       * Always prefer the least amount of changes possible, but ensure the solution is complete

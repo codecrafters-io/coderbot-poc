@@ -8,7 +8,15 @@ first_stage = stages.min_by(&:position)
 
 original_code = File.read("current_repository/app/main.py")
 
-result = TestPrompt.call(stage: first_stage, course: course, original_code: original_code).result
+test_runner_output = TestRunner.new("current_repository").run_tests
+
+result = TestPrompt.call(
+  stage: first_stage,
+  course: course,
+  original_code: original_code,
+  test_runner_output: test_runner_output
+).result
+
 puts result
 extracted_code = result.scan(/```python\n(.*?)```/m).join("\n")
 
