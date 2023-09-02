@@ -20,6 +20,18 @@ class Store
     @models_map = self.class.model_classes.map { |model_class| [model_class, {}] }.to_h
   end
 
+  def load_from_file(path)
+    data = JSON.parse(File.read(path))
+
+    data.each do |model_class, serialized_models|
+      model_class = Object.const_get(model_class)
+      serialized_models.each do |serialized_model|
+        instance = model_class.new(serialized_model).tap(&:validate!)
+        add(instance)
+      end
+    end
+  end
+
   def fetch_all
     response = HTTParty.get("https://backend.codecrafters.io/api/v1/courses?include=stages")
     parsed_response = JSON.parse(response.body)
