@@ -3,7 +3,7 @@ class TestPrompt
 
   def call
     client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"], request_timeout: 240)
-    puts system_message
+    # puts system_message
 
     raw_response = client.chat(
       parameters: {
