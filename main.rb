@@ -19,14 +19,14 @@ pass_stage_workflow = Workflows::PassStageWorkflow.new(
 
 pass_stage_workflow.run
 
+logs_file_path = "tmp/workflow_logs/#{course.slug}-#{local_repository.language.slug}-#{stage.position}.html"
+
+FileUtils.mkdir_p(File.dirname(logs_file_path)) unless Dir.exist?(File.dirname(logs_file_path))
+File.write(logs_file_path, pass_stage_workflow.html_logs)
+
 if pass_stage_workflow.error_message
   puts "Error: #{pass_stage_workflow.error_message}"
   exit 1
 else
   puts "Success!"
 end
-
-logs_file_path = "tmp/workflow_logs/#{course.slug}-#{local_repository.language.slug}-#{stage.position}.html"
-
-FileUtils.mkdir_p(File.dirname(logs_file_path)) unless Dir.exist?(File.dirname(logs_file_path))
-File.write(logs_file_path, pass_stage_workflow.html_logs)
