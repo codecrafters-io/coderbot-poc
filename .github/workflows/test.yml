@@ -33,3 +33,6 @@ jobs:
 
       - name: Stage 1
         run: bundle exec ruby main.rb ${{ matrix.course}} 1 test_repositories/${{ matrix.course }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
