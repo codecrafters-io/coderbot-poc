@@ -35,7 +35,10 @@ class Steps::AttemptFixStep
     <<~HTML
       <div>
         <h2>Attempt fix (Stage ##{stage.position})</h2>
-        <pre><code class="language-diff">#{diff.to_s(:text)}</code></pre>
+
+        <details>
+          <pre><code class="language-diff">#{diff.to_s(:text)}</code></pre>
+        </details>
       </div>
     HTML
   end

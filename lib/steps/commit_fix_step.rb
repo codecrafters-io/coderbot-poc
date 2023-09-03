@@ -24,6 +24,7 @@ class Steps::CommitFixStep
     <<~HTML
       <div>
         <h2>Commit fix (Stage ##{stage.position})</h2>
+
         <pre><code class="language-diff">#{diff.to_s(:text)}</code></pre>
       </div>
     HTML
