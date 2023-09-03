@@ -62,3 +62,13 @@ jobs:
         run: bundle exec ruby main.rb ${{ matrix.course}} 2 test_repositories/${{ matrix.course }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      - name: Commit Stage 2
+        run: |
+          git -C test_repositories/${{ matrix.course }} add .
+          git -C test_repositories/${{ matrix.course }} commit -am "Stage 3"
+
+      - name: Stage 3
+        run: bundle exec ruby main.rb ${{ matrix.course}} 3 test_repositories/${{ matrix.course }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
