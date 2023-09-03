@@ -15,7 +15,7 @@ class Workflows::PassStageWorkflow < Workflows::BaseWorkflow
     counter = 0
 
     loop do
-      if counter > 10
+      if counter > 5
         self.error_message = "Too many attempts!"
         break
       end
