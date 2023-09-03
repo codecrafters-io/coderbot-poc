@@ -25,6 +25,8 @@ jobs:
           ruby-version: "3.1" # diskcached doesn't support Ruby 3.2 yet
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
+      - run: mkdir -p cache/prompts
+
       - name: Cache prompts
         uses: actions/cache@v2
         with:
@@ -32,6 +34,8 @@ jobs:
           key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}
           restore-keys: |
             ${{ runner.os }}-prompts
+
+      - run: ls cache/prompts
 
       - run: make generate_fixtures
 
