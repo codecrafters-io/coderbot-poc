@@ -2,7 +2,9 @@ class BasePrompt
   include Interactor
 
   def self.diskcache
-    @diskcache ||= Diskcached.new("./cache/prompts")
+    @diskcache ||= Diskcached.new("./cache/prompts").tap do |diskcache|
+      diskcache.timeout = nil
+    end
   end
 
   def openai_chat(*args, **kwargs)
