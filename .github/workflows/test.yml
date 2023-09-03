@@ -51,7 +51,7 @@ jobs:
           git -C test_repositories/${{ matrix.course }} add .
           git -C test_repositories/${{ matrix.course }} commit -m "Initial commit"
 
-      - name: Stage 1
+      - name: Run tests
         run: bundle exec ruby main.rb ${{ matrix.course}} test_repositories/${{ matrix.course }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
