@@ -4,7 +4,7 @@ course_slug = ARGV[0]
 stage_position = ARGV[1].to_i
 repository_dir = ARGV[2]
 
-Store.instance.load_from_file("data/store.json")
+Store.instance.load_from_file("fixtures/store.json")
 
 course = Store.instance.models_for(Course).detect { |course| course.slug == course_slug }
 stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
