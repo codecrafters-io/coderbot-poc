@@ -33,6 +33,16 @@ class Workflows::BaseWorkflow
     error_message.nil?
   end
 
+  def summary_markdown
+    <<~MARKDOWN
+      Workflow #{success? ? "succeeded" : "failed"} with #{steps.length} steps.
+
+      **Steps**:
+
+      #{steps.map(&:title).map { |title| "- #{title}" }.join("\n")}
+    MARKDOWN
+  end
+
   def failure?
     !success?
   end

@@ -49,4 +49,8 @@ class Steps::AttemptFixStep
     puts diff.to_s(:color)
     puts ""
   end
+
+  def title
+    "Attempt fix (Stage ##{stage.position})"
+  end
 end

@@ -392,7 +392,7 @@
       "id": "2237fd98-cf05-4d66-b0ba-5f66d8808a09",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "bencode-int",
-      "description_markdown_template": "In this stage, you’ll decode a bencoded integer value.\n\nIntegers are encoded as `i<number>e`. For example, `52` is encoded as `i52e` and `-52` is encoded as `i-52e`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode i52e\n52\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "description_markdown_template": "In this stage, you'll extend the `decode` command to support bencoded integers.\n\nIntegers are encoded as `i<number>e`. For example, `52` is encoded as `i52e` and `-52` is encoded as `i-52e`.\n\nHere's how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode i52e\n52\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
       "position": 2,
       "name": "Decode bencoded integers"
     },
@@ -400,7 +400,7 @@
       "id": "4110e0c6-3bf2-4d2b-b2c1-0c5d5e4900eb",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "bencode-dict",
-      "description_markdown_template": "In this stage, you’ll decode a bencoded dictionary value.\n\nA dictionary is encoded as `d<key1><value1>...<keyN><valueN>e`. `<key1>`, `<value1>` etc. correspond to the bencoded keys & values. The keys are sorted in lexicographical order.\n\nFor example, `{\"hello\": 52, \"foo\":\"bar\"}` would be encoded as: `d3:foo3:bar5:helloi52ee` (note that the keys were reordered).\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode d3:foo3:bar5:helloi52ee\n{\"foo\":\"bar\",\"hello\":52}\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "description_markdown_template": "In this stage, you'll extend the `decode` command to support bencoded dictionaries.\n\nA dictionary is encoded as `d<key1><value1>...<keyN><valueN>e`. `<key1>`, `<value1>` etc. correspond to the bencoded keys & values. The keys are sorted in lexicographical order.\n\nFor example, `{\"hello\": 52, \"foo\":\"bar\"}` would be encoded as: `d3:foo3:bar5:helloi52ee` (note that the keys were reordered).\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode d3:foo3:bar5:helloi52ee\n{\"foo\":\"bar\",\"hello\":52}\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
       "position": 4,
       "name": "Decode bencoded dictionaries"
     },
@@ -408,17 +408,9 @@
       "id": "1ad5c4c0-d865-4858-835b-b0d781f2cb40",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "bencode-string",
-      "description_markdown_template": "[Bencode](https://en.wikipedia.org/wiki/Bencode) (pronounced *Bee-encode*) is a serialization format used in [the BitTorrent protocol](https://www.bittorrent.org/beps/bep_0003.html). It is used in torrent files and in communication between trackers and peers.\n\nBencode supports four data types:\n- strings\n- integers\n- arrays\n- dictionaries\n\nIn this stage, we'll focus on decoding strings.\n\nStrings are encoded as `<length>:<contents>`. For example, the string `\"hello\"` is encoded as `\"5:hello\"`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode 5:hello\n\"hello\"\n```\n",
+      "description_markdown_template": "[Bencode](https://en.wikipedia.org/wiki/Bencode) (pronounced *Bee-encode*) is a serialization format used in [the BitTorrent protocol](https://www.bittorrent.org/beps/bep_0003.html). It is used in torrent files and in communication between trackers and peers.\n\nBencode supports four data types:\n- strings\n- integers\n- arrays\n- dictionaries\n\nIn this stage, we'll focus on decoding strings.\n\nStrings are encoded as `<length>:<contents>`. For example, the string `\"hello\"` is encoded as `\"5:hello\"`.\n\nYou'll implement a `decode` command which takes a bencoded value as input and prints the decoded value as JSON.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode 5:hello\n\"hello\"\n```\n",
       "position": 1,
       "name": "Decode bencoded strings"
-    },
-    {
-      "id": "ae525d04-d1b6-4920-b762-581db14179f1",
-      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
-      "slug": "bencode-list",
-      "description_markdown_template": "In this stage, you’ll decode a bencoded list value.\n\nLists are encoded as `l<bencoded_elements>e`.\n\nFor example, `[\"hello\", 52]` would be encoded as `l5:helloi52ee`. Note that there are no separators between the elements.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode l5:helloi52ee\n[“hello”,52]\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
-      "position": 3,
-      "name": "Decode bencoded lists"
     },
     {
       "id": "b1e2f4f6-be98-4b0f-9f49-064ddefacb6f",
@@ -427,6 +419,14 @@
       "description_markdown_template": "In this stage, you’ll establish a TCP connection with a peer and complete a handshake.\n\nThe handshake is a message consisting of the following parts as described in the [peer protocol](https://www.bittorrent.org/beps/bep_0003.html#peer-protocol):\n\n1. length of the protocol string (BitTorrent protocol) which is `19`\n2. the string `BitTorrent protocol`\n3. eight reserved bytes, which are all set to zero\n4. 20 byte sha1 infohash\n5. 20 byte peer id (you can use `00112233445566778899` for this challenge)\n\nAfter we send a handshake to our peer, we should receive a handshake back in the same format.\n\nYour program should print the hexadecimal representation of the peer id you've received during the handshake.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh handshake sample.torrent <peer_ip>:<peer_port>\n```\nand here’s the output it expects:\n```\nPeer ID: 0102030405060708090a0b0c0d0e0f1011121314\n```\n\n**Note**: To get a peer IP & port to test this locally, run `./your_bittorrent.sh peers sample.torrent` and pick any peer from the list.\n",
       "position": 9,
       "name": "Peer handshake"
+    },
+    {
+      "id": "ae525d04-d1b6-4920-b762-581db14179f1",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-list",
+      "description_markdown_template": "In this stage, you'll extend the `decode` command to support bencoded lists.\n\nLists are encoded as `l<bencoded_elements>e`.\n\nFor example, `[\"hello\", 52]` would be encoded as `l5:helloi52ee`. Note that there are no separators between the elements.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode l5:helloi52ee\n[“hello”,52]\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "position": 3,
+      "name": "Decode bencoded lists"
     },
     {
       "id": "ec276239-df14-4b6d-9fcb-f69fa920bd05",

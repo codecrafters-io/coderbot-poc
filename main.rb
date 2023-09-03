@@ -22,6 +22,11 @@ logs_file_path = "tmp/workflow_logs/#{course.slug}-#{local_repository.language.s
 FileUtils.mkdir_p(File.dirname(logs_file_path)) unless Dir.exist?(File.dirname(logs_file_path))
 File.write(logs_file_path, workflow.html_logs)
 
+summary_file_path = "tmp/workflow_logs/#{course.slug}-#{local_repository.language.slug}.md"
+
+FileUtils.mkdir_p(File.dirname(summary_file_path)) unless Dir.exist?(File.dirname(summary_file_path))
+File.write(summary_file_path, workflow.summary_markdown)
+
 if workflow.error_message
   puts "Error: #{workflow.error_message}"
   exit 1
