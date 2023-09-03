@@ -11,40 +11,17 @@ stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id
 stage = stages.detect { |stage| stage.position == stage_position }
 local_repository = LocalRepository.new(repository_dir)
 
-counter = 0
+pass_stage_workflow = Workflows::PassStageWorkflow.new(
+  course: course,
+  stage: stage,
+  local_repository: local_repository
+)
 
-loop do
-  if counter > 10
-    raise "Too many attempts!"
-  end
+pass_stage_workflow.run
 
-  run_tests_step = Steps::RunTestsStep.new(
-    course: course,
-    stage: stage,
-    local_repository: local_repository
-  )
-
-  run_tests_step.perform
-  run_tests_step.print_logs_for_console
-
-  if run_tests_step.success?
-    break
-  end
-
-  counter += 1
-
-  puts "-------------------"
-  puts "Attempt #{counter}!"
-  puts "-------------------"
-  puts ""
-
-  attempt_fix_step = Steps::AttemptFixStep.new(
-    course: course,
-    stage: stage,
-    local_repository: local_repository,
-    test_runner_output: run_tests_step.test_runner_output
-  )
-
-  attempt_fix_step.perform
-  attempt_fix_step.print_logs_for_console
+if pass_stage_workflow.error_message
+  puts "Error: #{pass_stage_workflow.error_message}"
+  exit 1
+else
+  puts "Success!"
 end
