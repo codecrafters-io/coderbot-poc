@@ -25,3 +25,8 @@ if pass_stage_workflow.error_message
 else
   puts "Success!"
 end
+
+logs_file_path = "tmp/workflow_logs/#{course.slug}-#{local_repository.language.slug}-#{stage.position}.html"
+
+FileUtils.mkdir_p(File.dirname(logs_file_path)) unless Dir.exist?(File.dirname(logs_file_path))
+File.write(logs_file_path, pass_stage_workflow.html_logs)

@@ -1,17 +1,14 @@
-class Workflows::PassStageWorkflow
+class Workflows::PassStageWorkflow < Workflows::BaseWorkflow
   attr_accessor :course
   attr_accessor :stage
   attr_accessor :local_repository
 
-  attr_accessor :steps
-  attr_accessor :error_message
-
   def initialize(course:, stage:, local_repository:)
+    super
+
     @course = course
     @stage = stage
     @local_repository = local_repository
-
-    self.steps = []
   end
 
   def run

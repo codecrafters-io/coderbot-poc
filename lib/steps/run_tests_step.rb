@@ -11,6 +11,19 @@ class Steps::RunTestsStep
     @local_repository = local_repository
   end
 
+  def html_logs
+    <<~HTML
+      <div>
+        <h2>Run tests</h2>
+        <pre>
+          <code>
+            #{test_runner_output.last_stage_logs_without_colors}
+          </code>
+        </pre>
+      </div>
+    HTML
+  end
+
   def perform
     self.test_runner_output = LocalTestRunner.new(course, local_repository.repository_dir).run_tests(stage)
   end

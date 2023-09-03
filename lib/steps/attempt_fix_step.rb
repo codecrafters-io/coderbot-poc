@@ -31,6 +31,19 @@ class Steps::AttemptFixStep
     File.write(local_repository.code_file_path, edited_code)
   end
 
+  def html_logs
+    <<~HTML
+      <div>
+        <h2>Attempt fix</h2>
+        <pre>
+          <code>
+            #{diff_str}
+          </code>
+        </pre>
+      </div>
+    HTML
+  end
+
   def print_logs_for_console
     puts "Diff:"
     puts ""
