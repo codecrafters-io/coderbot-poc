@@ -18,17 +18,16 @@ loop do
     raise "Too many attempts!"
   end
 
-  current_code = File.read(local_repository.code_file_path)
-  test_runner_output = LocalTestRunner.new(course, repository_dir).run_tests(stage)
+  run_tests_step = Steps::RunTestsStep.new(
+    course: course,
+    stage: stage,
+    local_repository: local_repository
+  )
 
-  if test_runner_output.passed?
-    puts ""
-    puts "Logs:"
-    puts ""
-    puts test_runner_output.last_stage_logs
-    puts ""
+  run_tests_step.perform
+  run_tests_step.print_logs_for_console
 
-    puts "All tests passed!"
+  if run_tests_step.success?
     break
   end
 
@@ -39,25 +38,13 @@ loop do
   puts "-------------------"
   puts ""
 
-  puts "Logs:"
-  puts ""
-  puts test_runner_output.last_stage_logs
-  puts ""
-
-  result = TestPrompt.call(
-    stage: stage,
+  attempt_fix_step = Steps::AttemptFixStep.new(
     course: course,
-    original_code: current_code,
-    test_runner_output: test_runner_output
-  ).result
+    stage: stage,
+    local_repository: local_repository,
+    test_runner_output: run_tests_step.test_runner_output
+  )
 
-  edited_code = result.scan(/```#{local_repository.language.syntax_highlighting_identifier}\n(.*?)```/m).join("\n")
-
-  puts "Diff:"
-  puts ""
-
-  Diffy::Diff.default_format = :color
-  puts Diffy::Diff.new(current_code, edited_code, context: 2)
-
-  File.write(local_repository.code_file_path, edited_code)
+  attempt_fix_step.perform
+  attempt_fix_step.print_logs_for_console
 end
