@@ -33,9 +33,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: cache/prompts
-          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}
+          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-${{ hashFiles('prompts/**') }}
           restore-keys: |
-            ${{ runner.os }}-prompts
+            ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-
+            ${{ runner.os }}-prompts-
 
       - run: ls cache/prompts
 
