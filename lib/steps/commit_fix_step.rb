@@ -14,7 +14,7 @@ class Steps::CommitFixStep
   def perform
     current_code = File.read(local_repository.code_file_path)
     original_code = ShellCommand.new("git -C #{local_repository.repository_dir} show HEAD:#{local_repository.relative_code_file_path}").run!.stdout
-    self.diff = Diffy::Diff.new(current_code, original_code, context: 2)
+    self.diff = Diffy::Diff.new(original_code, current_code, context: 2)
 
     ShellCommand.new("git -C #{local_repository.repository_dir} add #{local_repository.relative_code_file_path}").run!
     ShellCommand.new("git -C #{local_repository.repository_dir} commit -am 'pass stage #{stage.position}'").run!
