@@ -17,6 +17,15 @@ run_redis_python:
 	git -C test_repositories/redis-python commit -am "Initial commit"
 	bundle exec ruby main.rb redis test_repositories/redis-python
 
+run_bittorrent_python:
+	mkdir -p test_repositories
+	rm -rf test_repositories/bittorrent-python
+	cp -R fixtures/courses/bittorrent/compiled_starters/python test_repositories/bittorrent-python
+	git -C test_repositories/bittorrent-python init
+	git -C test_repositories/bittorrent-python add .
+	git -C test_repositories/bittorrent-python commit -am "Initial commit"
+	bundle exec ruby main.rb bittorrent test_repositories/bittorrent-python
+
 git_reset:
 	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} reset --hard
 
