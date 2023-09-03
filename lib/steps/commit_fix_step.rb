@@ -17,7 +17,7 @@ class Steps::CommitFixStep
     self.diff = Diffy::Diff.new(original_code, current_code, context: 2)
 
     ShellCommand.new("git -C #{local_repository.repository_dir} add #{local_repository.relative_code_file_path}").run!
-    ShellCommand.new("git -C #{local_repository.repository_dir} commit -am --allow-empty 'pass stage #{stage.position}'").run!
+    ShellCommand.new("git -C #{local_repository.repository_dir} commit -a --allow-empty --message 'pass stage #{stage.position}'").run!
   end
 
   def html_logs
