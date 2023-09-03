@@ -41,4 +41,8 @@ class Steps::RunTestsStep
   def success?
     test_runner_output.passed?
   end
+
+  def title
+    "Run tests (Stage ##{stage.position})"
+  end
 end

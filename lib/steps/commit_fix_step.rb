@@ -36,4 +36,8 @@ class Steps::CommitFixStep
     puts diff.to_s(:color)
     puts ""
   end
+
+  def title
+    "Commit fix (Stage ##{stage.position})"
+  end
 end

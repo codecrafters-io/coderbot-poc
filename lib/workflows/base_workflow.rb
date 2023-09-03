@@ -34,11 +34,13 @@ class Workflows::BaseWorkflow
   end
 
   def summary_markdown
-    if success?
-      "Workflow succeeded with #{steps.length} steps."
-    else
-      "Workflow failed with #{steps.length} steps."
-    end
+    <<~MARKDOWN
+      Workflow #{success? ? "succeeded" : "failed"} with #{steps.length} steps.
+
+      **Steps**:
+
+      #{steps.map(&:title).map { |title| "- #{title}" }.join("\n")}
+    MARKDOWN
   end
 
   def failure?
