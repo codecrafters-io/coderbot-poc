@@ -5,14 +5,20 @@ class ShellCommand
     @command = command
   end
 
-  def run
+  def run(stream_output: false)
     _, stdout_io, stderr_io, wait_thr = Open3.popen3(command)
 
     puts ""
 
     stdout_captured, stderr_captured = StringIO.new, StringIO.new
-    setup_io_relay(stdout_io, $stdout, stdout_captured)
-    setup_io_relay(stderr_io, $stderr, stderr_captured)
+
+    if stream_output
+      setup_io_relay(stdout_io, $stdout, stdout_captured)
+      setup_io_relay(stderr_io, $stderr, stderr_captured)
+    else
+      setup_io_relay(stdout_io, File.open(File::NULL, "w"), stdout_captured)
+      setup_io_relay(stderr_io, File.open(File::NULL, "w"), stderr_captured)
+    end
 
     exit_code = wait_thr.value.exitstatus
     stdout, stderr = stdout_captured.string, stderr_captured.string
