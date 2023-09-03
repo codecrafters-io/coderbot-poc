@@ -1,3 +1,4 @@
+# Helper class to write a prefix before each line of a stream.
 class PrefixedLineWriter
   def initialize(prefix, target)
     @prefix = prefix
