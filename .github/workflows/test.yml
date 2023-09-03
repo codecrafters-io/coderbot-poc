@@ -41,6 +41,8 @@ jobs:
       - run: ls cache/prompts
 
       - run: make generate_fixtures
+      - run: git config --global user.email "hello@codecrafters.io"
+      - run: git config --global user.name "codecrafters-bot"
 
       - run: mkdir -p test_repositories
       - run: cp -R fixtures/courses/${{ matrix.course }}/compiled_starters/${{ matrix.language }} test_repositories/${{ matrix.course }}
