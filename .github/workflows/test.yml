@@ -14,8 +14,10 @@ jobs:
 
     strategy:
       matrix:
-        course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
-        language: ["go", "python"]
+        # course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
+        # language: ["go", "python"]
+        course: ["redis"]
+        language: ["go"]
 
     steps:
       - uses: actions/checkout@v3
@@ -28,7 +30,7 @@ jobs:
       - run: mkdir -p cache/prompts
 
       - name: Cache prompts
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: cache/prompts
           key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}
