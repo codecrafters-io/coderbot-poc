@@ -30,8 +30,11 @@ class LocalTestRunner
       "#{docker_image_tag} /init.sh"
     ].join(" "))
 
-    run_command.run!
-    TestRunnerOutput.new(run_command.stdout)
+    run_command_result = run_command.run
+
+    raise "Failed to run tests, got exit code #{run_command_result.exit_code}" unless [0, 1].include?(run_command_result.exit_code)
+
+    TestRunnerOutput.new(run_command_result.stdout)
   end
 
   protected

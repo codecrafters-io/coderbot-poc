@@ -25,18 +25,6 @@ class ShellCommand
 
     raise <<~ERROR if result.failure?
       Command failed: #{command}. Exit code: #{result.exit_code}
-
-      STDOUT:
-
-      ------------------------------------------------------------
-      #{result.stdout}
-      ------------------------------------------------------------
-
-      STDERR:
-
-      ------------------------------------------------------------
-      #{result.stderr}
-      ------------------------------------------------------------
     ERROR
 
     result
