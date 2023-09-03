@@ -34,14 +34,14 @@ class Steps::AttemptFixStep
   def html_logs
     <<~HTML
       <div>
-        <h2>Attempt fix</h2>
+        <h2>Attempt fix (Stage ##{stage.position})</h2>
         <pre><code class="language-diff">#{diff.to_s(:text)}</code></pre>
       </div>
     HTML
   end
 
   def print_logs_for_console
-    puts "Diff:"
+    puts "Diff (Stage ##{stage.position}):"
     puts ""
     puts diff.to_s(:color)
     puts ""

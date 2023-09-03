@@ -14,7 +14,7 @@ class Steps::RunTestsStep
   def html_logs
     <<~HTML
       <div>
-        <h2>Run tests</h2>
+        <h2>Run tests (Stage ##{stage.position})</h2>
         <pre><code>#{test_runner_output.last_stage_logs_without_colors}</code></pre>
       </div>
     HTML
@@ -25,7 +25,7 @@ class Steps::RunTestsStep
   end
 
   def print_logs_for_console
-    puts "Logs:"
+    puts "Logs: (Stage ##{stage.position})"
     puts ""
     puts test_runner_output.last_stage_logs
     puts ""

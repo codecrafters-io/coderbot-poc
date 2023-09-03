@@ -4,7 +4,7 @@ class Workflows::PassStageWorkflow < Workflows::BaseWorkflow
   attr_accessor :local_repository
 
   def initialize(course:, stage:, local_repository:)
-    super
+    super()
 
     @course = course
     @stage = stage
@@ -38,7 +38,7 @@ class Workflows::PassStageWorkflow < Workflows::BaseWorkflow
       counter += 1
 
       puts "-------------------"
-      puts "Attempt #{counter}!"
+      puts "Attempt #{counter}! (Stage ##{stage.position})"
       puts "-------------------"
       puts ""
 

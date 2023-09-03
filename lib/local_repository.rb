@@ -15,6 +15,10 @@ class LocalRepository
     files.first
   end
 
+  def relative_code_file_path
+    Pathname.new(code_file_path).relative_path_from(Pathname.new(@repository_dir)).to_s
+  end
+
   def language
     Language.find_by_language_pack!(language_pack)
   end

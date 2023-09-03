@@ -2,7 +2,7 @@ class Workflows::BaseWorkflow
   attr_accessor :steps
   attr_accessor :error_message
 
-  def initialize(course:, stage:, local_repository:)
+  def initialize
     self.steps = []
   end
 
@@ -27,5 +27,13 @@ class Workflows::BaseWorkflow
         </body>
       </html>
     HTML
+  end
+
+  def success?
+    error_message.nil?
+  end
+
+  def failure?
+    !success?
   end
 end
