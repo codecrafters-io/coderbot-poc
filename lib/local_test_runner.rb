@@ -1,7 +1,9 @@
-class TestRunner
+class LocalTestRunner
+  attr_accessor :course
   attr_accessor :repository_dir
 
-  def initialize(repository_dir)
+  def initialize(course, repository_dir)
+    @course = course
     @repository_dir = repository_dir
   end
 
@@ -12,5 +14,11 @@ class TestRunner
       raise "Failed to run tests" unless exit_code == 0
       TestRunnerOutput.new(output)
     end
+  end
+
+  protected
+
+  def tester_dir
+    TesterDownloader.new(course).download_if_needed
   end
 end
