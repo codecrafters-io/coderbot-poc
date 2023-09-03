@@ -63,3 +63,6 @@ jobs:
         with:
           name: workflow-logs
           path: tmp/workflow_logs/*.html
+
+      - name: Summary
+        run: cat tmp/workflow_logs/*.md > $GITHUB_STEP_SUMMARY

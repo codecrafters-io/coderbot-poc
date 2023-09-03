@@ -33,6 +33,14 @@ class Workflows::BaseWorkflow
     error_message.nil?
   end
 
+  def summary_markdown
+    if success?
+      "Workflow succeeded with #{steps.length} steps."
+    else
+      "Workflow failed with #{steps.length} steps."
+    end
+  end
+
   def failure?
     !success?
   end
