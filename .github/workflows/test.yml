@@ -16,8 +16,8 @@ jobs:
       matrix:
         # course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
         # language: ["go", "python"]
-        course: ["redis"]
-        language: ["go"]
+        course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
+        language: ["python"]
 
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
           key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-${{ hashFiles('prompts/**') }}
           restore-keys: |
             ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-
-            ${{ runner.os }}-prompts-
+            ${{ runner.os }}-prompts
 
       - run: ls cache/prompts
 
