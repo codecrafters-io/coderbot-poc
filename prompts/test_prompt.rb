@@ -1,11 +1,6 @@
-class TestPrompt
-  include Interactor
-
+class TestPrompt < BasePrompt
   def call
-    client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"], request_timeout: 240)
-    # puts system_message
-
-    raw_response = client.chat(
+    raw_response = openai_chat(
       parameters: {
         model: "gpt-4",
         messages: [
@@ -19,10 +14,6 @@ class TestPrompt
   end
 
   protected
-
-  # def format_diff(diff)
-  #   diff.lines.each_with_index.map { |line, index| "#{index + 1}: #{line}" }.join
-  # end
 
   def system_message
     <<~PROMPT

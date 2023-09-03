@@ -25,6 +25,14 @@ jobs:
           ruby-version: "3.2" # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
+      - name: Cache prompts
+        uses: actions/cache@v2
+        with:
+          path: cache/prompts
+          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}
+          restore-keys: |
+            ${{ runner.os }}-prompts
+
       - run: make generate_fixtures
 
       - run: mkdir -p test_repositories
@@ -35,4 +43,3 @@ jobs:
         run: bundle exec ruby main.rb ${{ matrix.course}} 1 test_repositories/${{ matrix.course }}
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-
