@@ -14,6 +14,10 @@ local_repository = LocalRepository.new(repository_dir)
 counter = 0
 
 loop do
+  if counter > 10
+    raise "Too many attempts!"
+  end
+
   current_code = File.read(local_repository.code_file_path)
   test_runner_output = LocalTestRunner.new(course, repository_dir).run_tests(stage)
 
@@ -21,10 +25,9 @@ loop do
     puts ""
     puts "Logs:"
     puts ""
-
     puts test_runner_output.last_stage_logs
-
     puts ""
+
     puts "All tests passed!"
     break
   end
@@ -38,8 +41,8 @@ loop do
 
   puts "Logs:"
   puts ""
-
   puts test_runner_output.last_stage_logs
+  puts ""
 
   result = TestPrompt.call(
     stage: stage,
