@@ -9,11 +9,12 @@ Store.instance.load_from_file("fixtures/store.json")
 course = Store.instance.models_for(Course).detect { |course| course.slug == course_slug }
 stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
 stage = stages.detect { |stage| stage.position == stage_position }
+local_repository = LocalRepository.new(repository_dir)
 
 counter = 0
 
 loop do
-  current_code = File.read("#{repository_dir}/app/main.py")
+  current_code = File.read(local_repository.code_file_path)
   test_runner_output = LocalTestRunner.new(course, repository_dir).run_tests(stage)
 
   if test_runner_output.passed?
@@ -47,7 +48,7 @@ loop do
     test_runner_output: test_runner_output
   ).result
 
-  edited_code = result.scan(/```python\n(.*?)```/m).join("\n")
+  edited_code = result.scan(/```#{local_repository.language.syntax_highlighting_identifier}\n(.*?)```/m).join("\n")
 
   puts "Diff:"
   puts ""
@@ -55,5 +56,5 @@ loop do
   Diffy::Diff.default_format = :color
   puts Diffy::Diff.new(current_code, edited_code, context: 2)
 
-  File.write("#{repository_dir}/app/main.py", edited_code)
+  File.write(local_repository.code_file_path, edited_code)
 end
