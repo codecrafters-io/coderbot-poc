@@ -6,7 +6,7 @@ class TestPrompt < BasePrompt
         messages: [
           {role: "system", content: system_message}
         ],
-        temperature: 0
+        temperature: 0.7
       }
     )
 
