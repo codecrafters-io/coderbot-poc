@@ -104,7 +104,7 @@
       "id": "d05f8785-6b11-4ee8-86dc-8bc68c1a8dfd",
       "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
       "slug": "ping-pong-multiple",
-      "description_markdown_template": "In this stage, you'll respond to multiple\n[PING](https://redis.io/commands/ping) commands sent by the same connection.\n\nTo test your implementation using the [official Redis CLI](https://redis.io/docs/ui/cli/), you can start your server using \n`./spawn_redis_server.sh` and then run `echo -e \"ping\\nping\" | redis-cli` from your terminal. This will send two PING commands\nusing the same connection. \n\n{{#lang_is_javascript}}\nIn most languages, you'd need to run a loop that reads input from a connection and sends a\nresponse back. In JavaScript however, if you're listening to the\n[`data`](https://nodejs.org/api/net.html#net_event_data) event, this should be automatically handled for you. **It\nis very likely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nYou'll need to run a loop that reads input from a connection and sends a\nresponse back.\n{{/lang_is_javascript}}\n",
+      "description_markdown_template": "In this stage, you'll respond to multiple\n[PING](https://redis.io/commands/ping) commands sent by the same connection.\n\nTo test your implementation using the [official Redis CLI](https://redis.io/docs/ui/cli/), you can start your server using\n`./spawn_redis_server.sh` and then run `echo -e \"ping\\nping\" | redis-cli` from your terminal. This will send two PING commands\nusing the same connection.\n\n{{#lang_is_javascript}}\nIn most languages, you'd need to run a loop that reads input from a connection and sends a\nresponse back. In JavaScript however, if you're listening to the\n[`data`](https://nodejs.org/api/net.html#net_event_data) event, this should be automatically handled for you. **It\nis very likely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nYou'll need to run a loop that reads input from a connection and sends a\nresponse back.\n{{/lang_is_javascript}}\n\nSince the tester client _only_ sends the PING command at the moment, it's okay to\nignore what the client sends and hardcode a response. We'll get to parsing\nclient input in later stages.\n",
       "position": 3,
       "name": "Respond to multiple PINGs"
     },
@@ -136,7 +136,7 @@
       "id": "be936dce-f863-4441-953a-cf4ba1b043d1",
       "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
       "slug": "concurrent-clients",
-      "description_markdown_template": "In this stage, your server will need to handle multiple concurrent\nclients. Just like the previous stages, all clients will only send `PING`\ncommands for now.\n\n{{#lang_is_javascript}}\nIn most languages, you'd need to either use threads or implement an\n[Event Loop](https://en.wikipedia.org/wiki/Event_loop) to do this. In JavaScript however, since [the concurrency\nmodel itself is based on an event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop), most\nstandard library functions are designed to support this kind of concurrent behaviour out of the box. **It is very\nlikely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nTo achieve this, you'll need to either use threads, or, if you're feeling\nadventurous, an [Event Loop](https://en.wikipedia.org/wiki/Event_loop) (like\nthe official Redis implementation does).\n{{/lang_is_javascript}}\n",
+      "description_markdown_template": "In this stage, your server will need to handle multiple concurrent\nclients. Just like the previous stages, all clients will only send `PING`\ncommands for now.\n\n{{#lang_is_javascript}}\nIn most languages, you'd need to either use threads or implement an\n[Event Loop](https://en.wikipedia.org/wiki/Event_loop) to do this. In JavaScript however, since [the concurrency\nmodel itself is based on an event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop), most\nstandard library functions are designed to support this kind of concurrent behaviour out of the box. **It is very\nlikely that the code you had for the previous stage will pass this stage without any changes!**\n{{/lang_is_javascript}}\n\n{{^lang_is_javascript}}\nTo achieve this, you'll need to either use threads, or, if you're feeling\nadventurous, an [Event Loop](https://en.wikipedia.org/wiki/Event_loop) (like\nthe official Redis implementation does).\n{{/lang_is_javascript}}\n\nSince the tester client _only_ sends the PING command at the moment, it's okay to\nignore what the client sends and hardcode a response. We'll get to parsing\nclient input in later stages.\n",
       "position": 4,
       "name": "Handle concurrent clients"
     },
@@ -152,7 +152,7 @@
       "id": "0de30170-2ef7-4c8b-b6e9-8f20cf455b74",
       "course_id": "a4eb07c8-84ac-4bbf-b9f8-a44cb3481590",
       "slug": "expiry",
-      "description_markdown_template": "In this stage, you'll need to support setting a key with an expiry. The\nexpiry is provided using the \"PX\" argument to the\n[SET](https://redis.io/commands/set) command.\n\nThe tester will first send a `SET` command with an expiry, like this: `SET <key> <value> PX <expiry>`.\nThen, it will send a `GET` command to retrieve the value, like this: `GET <key>`. If the key has expired, the \ntester will expect a Null value as the response. Read about \"Null Bulk Strings\" \n[here](https://redis.io/docs/reference/protocol-spec/#resp-bulk-strings) to know how to send a Null value.\n\n{{#lang_is_haskell}}\nThe [time](https://hackage.haskell.org/package/time) package is available\nto use as a dependency.\n{{/lang_is_haskell}}\n",
+      "description_markdown_template": "In this stage, you'll need to support setting a key with an expiry. The\nexpiry is provided using the \"PX\" argument to the\n[SET](https://redis.io/commands/set) command.\n\nThe tester will first send a `SET` command with an expiry, like this: `SET <key> <value> PX <expiry>`.\nThen, it will send a `GET` command to retrieve the value, like this: `GET <key>`. If the key has expired, the\ntester will expect a Null value as the response. Read about \"Null Bulk Strings\"\n[here](https://redis.io/docs/reference/protocol-spec/#resp-bulk-strings) to know how to send a Null value.\n\n{{#lang_is_haskell}}\nThe [time](https://hackage.haskell.org/package/time) package is available\nto use as a dependency.\n{{/lang_is_haskell}}\n",
       "position": 7,
       "name": "Expiry"
     },
@@ -389,20 +389,28 @@
       "name": "Respond with 404"
     },
     {
-      "id": "1ad5c4c0-d865-4858-835b-b0d781f2cb40",
-      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
-      "slug": "bencode-string",
-      "description_markdown_template": "[Bencode](https://en.wikipedia.org/wiki/Bencode) (pronounced *Bee-encode*) is a serialization format used in [the BitTorrent protocol](https://www.bittorrent.org/beps/bep_0003.html). It is used in torrent files and in communication between trackers and peers.\n\nBencode supports four data types:\n- strings\n- integers\n- arrays\n- dictionaries\n\nIn this stage, we'll focus on decoding strings.\n\nStrings are encoded as `<length>:<contents>`. For example, the string `\"hello\"` is encoded as `\"5:hello\"`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode 5:hello\n\"hello\"\n```\n",
-      "position": 1,
-      "name": "Decode bencoded strings"
-    },
-    {
       "id": "2237fd98-cf05-4d66-b0ba-5f66d8808a09",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "bencode-int",
       "description_markdown_template": "In this stage, you’ll decode a bencoded integer value.\n\nIntegers are encoded as `i<number>e`. For example, `52` is encoded as `i52e` and `-52` is encoded as `i-52e`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode i52e\n52\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
       "position": 2,
       "name": "Decode bencoded integers"
+    },
+    {
+      "id": "4110e0c6-3bf2-4d2b-b2c1-0c5d5e4900eb",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-dict",
+      "description_markdown_template": "In this stage, you’ll decode a bencoded dictionary value.\n\nA dictionary is encoded as `d<key1><value1>...<keyN><valueN>e`. `<key1>`, `<value1>` etc. correspond to the bencoded keys & values. The keys are sorted in lexicographical order.\n\nFor example, `{\"hello\": 52, \"foo\":\"bar\"}` would be encoded as: `d3:foo3:bar5:helloi52ee` (note that the keys were reordered).\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode d3:foo3:bar5:helloi52ee\n{\"foo\":\"bar\",\"hello\":52}\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
+      "position": 4,
+      "name": "Decode bencoded dictionaries"
+    },
+    {
+      "id": "1ad5c4c0-d865-4858-835b-b0d781f2cb40",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "bencode-string",
+      "description_markdown_template": "[Bencode](https://en.wikipedia.org/wiki/Bencode) (pronounced *Bee-encode*) is a serialization format used in [the BitTorrent protocol](https://www.bittorrent.org/beps/bep_0003.html). It is used in torrent files and in communication between trackers and peers.\n\nBencode supports four data types:\n- strings\n- integers\n- arrays\n- dictionaries\n\nIn this stage, we'll focus on decoding strings.\n\nStrings are encoded as `<length>:<contents>`. For example, the string `\"hello\"` is encoded as `\"5:hello\"`.\n\nHere’s how the tester will execute your program:\n\n```\n$ ./your_bittorrent.sh decode 5:hello\n\"hello\"\n```\n",
+      "position": 1,
+      "name": "Decode bencoded strings"
     },
     {
       "id": "ae525d04-d1b6-4920-b762-581db14179f1",
@@ -421,20 +429,20 @@
       "name": "Peer handshake"
     },
     {
-      "id": "e79deec9-971f-424f-8581-5c8aaf170e80",
-      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
-      "slug": "dl-piece",
-      "description_markdown_template": "In this stage, you'll download one piece and save it to disk. In the next stage we'll combine these pieces into a file.\n\nTo download a piece, your program will need to need to send [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to a peer. The overall flow looks like this:\n\n- Read the torrent file to get the tracker URL\n    - you've done this in previous stages\n- Perform the tracker GET request to get a list of peers\n    - you've done this in previous stages\n- Establish a TCP connection with a peer, and perform a handshake\n    - you've done this in previous stages\n- Exchange multiple [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to download the file\n    - **This is the part you'll implement in this stage**\n\n### Peer Messages\n\nPeer messages consist of a message length prefix (4 bytes), message id (1 byte) and a payload (variable size).\n\nHere are the peer messages you'll need to exchange once the handshake is complete:\n\n- Wait for a `bitfield` message from the peer indicating which pieces it has\n    - The message id for this message is `5`.\n    - You can ignore the payload for now, the tracker we use for this challenge ensures that all peers have all pieces available.\n- Send an `interested` message\n    - The message id for `interested` is `2`.\n    - The payload for this message is empty.\n- Wait until you receive an `unchoke` message back\n    - The message id for `unchoke` is `1`.\n    - The payload for this message is empty.\n- Break the piece into blocks of 16 kiB (16 * 1024 bytes) and send a `request` message for each block\n    - The message id for `request` is `6`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n            - This'll be `0` for the first block, `2^14` for the second block, 2*2^14 for the third block etc.\n        - `length`: set this to `2^14` (16 * 1024)\n- Wait for a `piece` message for each block you've requested\n    - The message id for `piece` is `7`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n        - `block`: the data for the piece, usually `2^14` bytes long\n\nAfter receiving blocks and combining them into pieces, you'll want to check the integrity of each piece by comparing it's hash\nwith the piece hash value found in the torrent file.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh download_piece -o /tmp/test-piece-0 sample.torrent 0\n```\nand here’s the output it expects:\n```\nPiece 0 downloaded to /tmp/test-piece-0.\n```\n\n**Optional:** To improve download speeds, you can consider pipelining your requests. [BitTorrent Economics Paper](http://bittorrent.org/bittorrentecon.pdf) recommends having 5 requests pending at once, to avoid a delay between blocks being sent.\n",
-      "position": 10,
-      "name": "Download a piece"
-    },
-    {
       "id": "ec276239-df14-4b6d-9fcb-f69fa920bd05",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "infohash",
       "description_markdown_template": "Info hash is a unique identifier for a torrent file. It's used when talking to trackers or peers.\n\nIn this stage, you'll calculate the info hash for a torrent file and print it in hexadecimal format.\n\nTo calculate the info hash, you'll need to:\n\n- Extract the `info` dictionary from the torrent file\n- Bencode the contents of the `info` dictionary, and calculate the SHA-1 hash\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\nand here’s the output it expects:\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\nInfo Hash: c77829d2a77d6516f88cd7a3de1a26abcbfab0db\n```\n",
       "position": 6,
       "name": "Calculate info hash"
+    },
+    {
+      "id": "e79deec9-971f-424f-8581-5c8aaf170e80",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "dl-piece",
+      "description_markdown_template": "In this stage, you'll download one piece and save it to disk. In the next stage we'll combine these pieces into a file.\n\nTo download a piece, your program will need to need to send [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to a peer. The overall flow looks like this:\n\n- Read the torrent file to get the tracker URL\n    - you've done this in previous stages\n- Perform the tracker GET request to get a list of peers\n    - you've done this in previous stages\n- Establish a TCP connection with a peer, and perform a handshake\n    - you've done this in previous stages\n- Exchange multiple [peer messages](https://www.bittorrent.org/beps/bep_0003.html#peer-messages) to download the file\n    - **This is the part you'll implement in this stage**\n\n### Peer Messages\n\nPeer messages consist of a message length prefix (4 bytes), message id (1 byte) and a payload (variable size).\n\nHere are the peer messages you'll need to exchange once the handshake is complete:\n\n- Wait for a `bitfield` message from the peer indicating which pieces it has\n    - The message id for this message is `5`.\n    - You can ignore the payload for now, the tracker we use for this challenge ensures that all peers have all pieces available.\n- Send an `interested` message\n    - The message id for `interested` is `2`.\n    - The payload for this message is empty.\n- Wait until you receive an `unchoke` message back\n    - The message id for `unchoke` is `1`.\n    - The payload for this message is empty.\n- Break the piece into blocks of 16 kiB (16 * 1024 bytes) and send a `request` message for each block\n    - The message id for `request` is `6`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n            - This'll be `0` for the first block, `2^14` for the second block, 2*2^14 for the third block etc.\n        - `length`: set this to `2^14` (16 * 1024)\n- Wait for a `piece` message for each block you've requested\n    - The message id for `piece` is `7`.\n    - The payload for this message consists of:\n        - `index`: the zero-based piece index\n        - `begin`: the zero-based byte offset within the piece\n        - `block`: the data for the piece, usually `2^14` bytes long\n\nAfter receiving blocks and combining them into pieces, you'll want to check the integrity of each piece by comparing it's hash\nwith the piece hash value found in the torrent file.\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh download_piece -o /tmp/test-piece-0 sample.torrent 0\n```\nand here’s the output it expects:\n```\nPiece 0 downloaded to /tmp/test-piece-0.\n```\n\n**Optional:** To improve download speeds, you can consider pipelining your requests. [BitTorrent Economics Paper](http://bittorrent.org/bittorrentecon.pdf) recommends having 5 requests pending at once, to avoid a delay between blocks being sent.\n",
+      "position": 10,
+      "name": "Download a piece"
     },
     {
       "id": "8cd1efd2-bd2a-4080-af49-9c46c3b8a095",
@@ -445,14 +453,6 @@
       "name": "Parse torrent file"
     },
     {
-      "id": "ed9b114e-6bf8-4bf0-bcc9-9fd70db0e90f",
-      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
-      "slug": "hashes",
-      "description_markdown_template": "In a torrent, a file is split into equally-sized parts called **pieces**. A piece is usually 256 KB or 1 MB in size.\n\nEach piece is assigned a SHA-1 hash value. On public networks, there may be malicious peers that send fake data. These hash values allow us to verify the integrity of each piece that we'll download.\n\nPiece length and piece hashes are specified in the `info` dictionary of the torrent file under the following keys:\n\n- `piece length`: number of bytes in each piece, an integer\n- `pieces`: concatenated SHA-1 hashes of each piece (20 bytes each), a string\n\nThe [BitTorrent Protocol Specification](https://www.bittorrent.org/beps/bep_0003.html#info-dictionary) has more information about these keys.\n\nIn this stage, the tester will expect your program to print piece length and a list of piece hashes in hexadecimal format.\n\nHere's how the tester will execute your program:\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\nand here's the output it expects:\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\nInfo Hash: c77829d2a77d6516f88cd7a3de1a26abcbfab0db\nPiece Length: 262144\nPiece Hashes:\nddf33172599fda84f0a209a3034f79f0b8aa5e22\n795a618a1ee5275e952843b01a56ae4e142752ef\ncdae2ef532d611a46b2cf7b64d578c09b3ac0b6e\n098dadc0c19436f1927ea27b90eb18b1a2820a23\n```\n",
-      "position": 7,
-      "name": "Piece hashes"
-    },
-    {
       "id": "44575f40-7c51-4af5-a008-92a83d73bd6a",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "dl-file",
@@ -461,20 +461,20 @@
       "name": "Download the whole file"
     },
     {
-      "id": "4110e0c6-3bf2-4d2b-b2c1-0c5d5e4900eb",
-      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
-      "slug": "bencode-dict",
-      "description_markdown_template": "In this stage, you’ll decode a bencoded dictionary value.\n\nA dictionary is encoded as `d<key1><value1>...<keyN><valueN>e`. `<key1>`, `<value1>` etc. correspond to the bencoded keys & values. The keys are sorted in lexicographical order.\n\nFor example, `{\"hello\": 52, \"foo\":\"bar\"}` would be encoded as: `d3:foo3:bar5:helloi52ee` (note that the keys were reordered).\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh decode d3:foo3:bar5:helloi52ee\n{\"foo\":\"bar\",\"hello\":52}\n```\n\n{{#lang_is_go}}\nIf you'd prefer to use a library for this stage, [bencode-go](https://github.com/jackpal/bencode-go) is available for you to use.\n{{/lang_is_go}}\n{{#lang_is_python}}\nIf you'd prefer to use a library for this stage, [bencode.py](https://pypi.org/project/bencode.py/) is available for you to use.\n{{/lang_is_python}}\n",
-      "position": 4,
-      "name": "Decode bencoded dictionaries"
-    },
-    {
       "id": "4ee2eb6b-8402-4344-996b-fb73f1c24afb",
       "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
       "slug": "peers",
       "description_markdown_template": "Trackers are central servers that maintain information about peers participating in the sharing and downloading of a torrent.\n\nIn this stage, you'll make a GET request to a HTTP tracker to discover peers to download the file from.\n\n### Tracker GET request\n\nYou'll need to make a request to the tracker URL you extracted in the previous stage, and include these query params:\n\n- `info_hash`: the info hash of the torrent\n    - 20 bytes long, will need to be URL encoded\n    - **Note**: this is **NOT** the hexadecimal representation, which is 40 bytes long\n- `peer_id`: a unique identifier for your client\n    - For the purposes of this challenge, it doesn't matter what you set this to.\n    - You can use `00112233445566778899`.\n- `port`: the port your client is listening on\n    - For the purposes of this challenge, it doesn't matter what you set this to.\n    - You can use `6881`.\n- `uploaded`: the total amount uploaded so far\n    - Since your client hasn't uploaded anything yet, you can set this to `0`.\n- `downloaded`: the total amount downloaded so far\n    - Since your client hasn't downloaded anything yet, you can set this to `0`.\n- `left`: the number of bytes left to download\n    - Since you client hasn't downloaded anything yet, this'll be the total length of the file (you've extracted this value from the torrent file in previous stages)\n- `compact`: whether the peer list should use the [compact representation](https://www.bittorrent.org/beps/bep_0023.html)\n    - For the purposes of this challenge, set this to `1`.\n    - The compact representation is more commonly used in the wild, the non-compact representation is mostly supported for backward-compatibility.\n\nRead [the BitTorrent Protocol Specification](https://www.bittorrent.org/beps/bep_0003.html#trackers) for more information about these query parameters.\n\n### Tracker response\n\nThe tracker's response will be a bencoded dictionary with two keys:\n\n- `interval`:\n    - An integer, indicating how often your client should make a request to the tracker.\n    - You can ignore this value for the purposes of this challenge.\n- `peers`.\n    - A string, which contains list of peers that your client can connect to.\n    - Each peer is represented using 6 bytes. The first 4 bytes are the peer's IP address and the last 2 bytes are the peer's port number.\n\n---\n\nHere’s how the tester will execute your program:\n```\n$ ./your_bittorrent.sh peers sample.torrent\n```\nand here’s the output it expects:\n```\n188.119.61.177:6881\n71.224.0.29:51414\n62.153.208.98:3652\n```\n",
       "position": 8,
       "name": "Discover peers"
+    },
+    {
+      "id": "ed9b114e-6bf8-4bf0-bcc9-9fd70db0e90f",
+      "course_id": "37286876-f9a2-4a70-9fa0-b547b0ec2cbb",
+      "slug": "hashes",
+      "description_markdown_template": "In a torrent, a file is split into equally-sized parts called **pieces**. A piece is usually 256 KB or 1 MB in size.\n\nEach piece is assigned a SHA-1 hash value. On public networks, there may be malicious peers that send fake data. These hash values allow us to verify the integrity of each piece that we'll download.\n\nPiece length and piece hashes are specified in the `info` dictionary of the torrent file under the following keys:\n\n- `piece length`: number of bytes in each piece, an integer\n- `pieces`: concatenated SHA-1 hashes of each piece (20 bytes each), a string\n\nThe [BitTorrent Protocol Specification](https://www.bittorrent.org/beps/bep_0003.html#info-dictionary) has more information about these keys.\n\nIn this stage, the tester will expect your program to print piece length and a list of piece hashes in hexadecimal format.\n\nHere's how the tester will execute your program:\n```\n$ ./your_bittorrent.sh info sample.torrent\n```\nand here's the output it expects:\n```\nTracker URL: http://bittorrent-test-tracker.codecrafters.io/announce\nLength: 1048500\nInfo Hash: c77829d2a77d6516f88cd7a3de1a26abcbfab0db\nPiece Length: 262144\nPiece Hashes:\nddf33172599fda84f0a209a3034f79f0b8aa5e22\n795a618a1ee5275e952843b01a56ae4e142752ef\ncdae2ef532d611a46b2cf7b64d578c09b3ac0b6e\n098dadc0c19436f1927ea27b90eb18b1a2820a23\n```\n",
+      "position": 7,
+      "name": "Piece hashes"
     }
   ]
 }

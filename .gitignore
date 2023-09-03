@@ -1,1 +1,5 @@
 test_repositories/
+cache/
+fixtures/courses
+fixtures/testers
+tmp/

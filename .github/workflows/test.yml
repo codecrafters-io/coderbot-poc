@@ -1,0 +1,65 @@
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      matrix:
+        # course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
+        # language: ["go", "python"]
+        course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
+        language: ["python"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1" # diskcached doesn't support Ruby 3.2 yet
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - run: mkdir -p cache/prompts
+
+      - name: Cache prompts
+        uses: actions/cache@v3
+        with:
+          path: cache/prompts
+          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-
+            ${{ runner.os }}-prompts
+
+      - run: ls cache/prompts
+
+      - run: make generate_fixtures
+      - run: git config --global user.email "hello@codecrafters.io"
+      - run: git config --global user.name "codecrafters-bot"
+
+      - run: mkdir -p test_repositories
+      - run: cp -R fixtures/courses/${{ matrix.course }}/compiled_starters/${{ matrix.language }} test_repositories/${{ matrix.course }}
+      - run: |
+          git -C test_repositories/${{ matrix.course }} init
+          git -C test_repositories/${{ matrix.course }} add .
+          git -C test_repositories/${{ matrix.course }} commit -m "Initial commit"
+
+      - name: Run tests
+        run: bundle exec ruby main.rb ${{ matrix.course}} test_repositories/${{ matrix.course }}
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{github.token}}
+
+      - name: Persist workflow logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: workflow-logs
+          path: tmp/workflow_logs/*.html

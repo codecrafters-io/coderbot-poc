@@ -6,10 +6,15 @@ class TestRunnerOutput
   end
 
   def passed?
-    raw_output.include?("All tests ran successfully. Congrats!")
+    last_stage_logs.gsub(/\e\[(\d+)m/, "").include?("Test passed.")
   end
 
   def last_stage_logs
-    raw_output.split("\n\n")[-2]
+    blocks = raw_output.split("\n\n")
+    blocks.reverse.find { |block| block.gsub(/\e\[(\d+)m/, "").start_with?("[stage-") }
+  end
+
+  def last_stage_logs_without_colors
+    last_stage_logs.gsub(/\e\[(\d+)m/, "")
   end
 end

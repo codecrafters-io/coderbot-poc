@@ -1,4 +1,4 @@
-class TestRunner
+class RemoteTestRunner
   attr_accessor :repository_dir
 
   def initialize(repository_dir)
