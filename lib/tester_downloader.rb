@@ -1,5 +1,5 @@
 class TesterDownloader
-  TESTERS_ROOT_DIR = File.join(File.dirname(__FILE__), "..", "testers")
+  TESTERS_ROOT_DIR = File.join(File.dirname(__FILE__), "..", "fixtures", "testers")
 
   def initialize(course)
     @course = course

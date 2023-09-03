@@ -1,5 +1,12 @@
 generate_fixtures:
 	bundle exec ruby scripts/generate_fixtures.rb
+	mkdir -p fixtures/courses
+	git clone https://github.com/codecrafters-io/build-your-own-redis fixtures/courses/redis
+	git clone https://github.com/codecrafters-io/build-your-own-docker fixtures/courses/docker
+	git clone https://github.com/codecrafters-io/build-your-own-git fixtures/courses/git
+	git clone https://github.com/codecrafters-io/build-your-own-sqlite fixtures/courses/sqlite
+	git clone https://github.com/codecrafters-io/build-your-own-grep fixtures/courses/grep
+	git clone https://github.com/codecrafters-io/build-your-own-bittorrent fixtures/courses/bittorrent
 
 # run_stage_1_redis:
 # 	git -C test_repositories/redis reset --hard
