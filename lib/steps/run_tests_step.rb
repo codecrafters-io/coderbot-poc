@@ -15,11 +15,7 @@ class Steps::RunTestsStep
     <<~HTML
       <div>
         <h2>Run tests</h2>
-        <pre>
-          <code>
-            #{test_runner_output.last_stage_logs_without_colors}
-          </code>
-        </pre>
+        <pre><code>#{test_runner_output.last_stage_logs_without_colors}</code></pre>
       </div>
     HTML
   end

@@ -4,7 +4,7 @@ class Steps::AttemptFixStep
   attr_accessor :stage
   attr_accessor :test_runner_output
 
-  attr_accessor :diff_str
+  attr_accessor :diff
 
   def initialize(course:, stage:, local_repository:, test_runner_output:)
     @course = course
@@ -26,7 +26,7 @@ class Steps::AttemptFixStep
     edited_code = result.scan(/```#{local_repository.language.syntax_highlighting_identifier}\n(.*?)```/m).join("\n")
 
     Diffy::Diff.default_format = :color
-    self.diff_str = Diffy::Diff.new(current_code, edited_code, context: 2).to_s
+    self.diff = Diffy::Diff.new(current_code, edited_code, context: 2)
 
     File.write(local_repository.code_file_path, edited_code)
   end
@@ -35,11 +35,7 @@ class Steps::AttemptFixStep
     <<~HTML
       <div>
         <h2>Attempt fix</h2>
-        <pre>
-          <code>
-            #{diff_str}
-          </code>
-        </pre>
+        <pre><code class="language-diff">#{diff.to_s(:text)}</code></pre>
       </div>
     HTML
   end
@@ -47,7 +43,7 @@ class Steps::AttemptFixStep
   def print_logs_for_console
     puts "Diff:"
     puts ""
-    puts diff_str
+    puts diff.to_s(:color)
     puts ""
   end
 end
