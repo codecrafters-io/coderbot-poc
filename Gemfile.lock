@@ -37,6 +37,8 @@ GEM
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -78,6 +80,9 @@ GEM
     standard-performance (1.2.0)
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.19.0)
+    tty-color (0.6.0)
+    tty-command (0.10.1)
+      pastel (~> 0.8)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
@@ -95,6 +100,7 @@ DEPENDENCIES
   pry
   ruby-openai
   standard
+  tty-command
   zeitwerk
 
 BUNDLED WITH

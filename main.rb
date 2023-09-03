@@ -8,17 +8,13 @@ Store.instance.load_from_file("fixtures/store.json")
 
 course = Store.instance.models_for(Course).detect { |course| course.slug == course_slug }
 stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
-first_stage = stages.detect { |stage| stage.position == stage_position }
-
-tester_dir = TesterDownloader.new(course).download_if_needed
+stage = stages.detect { |stage| stage.position == stage_position }
 
 counter = 0
 
-exit 1
-
 loop do
   current_code = File.read("#{repository_dir}/app/main.py")
-  test_runner_output = TestRunner.new(repository_dir).run_tests
+  test_runner_output = LocalTestRunner.new(course, repository_dir).run_tests(stage)
 
   if test_runner_output.passed?
     puts ""
@@ -45,7 +41,7 @@ loop do
   puts test_runner_output.last_stage_logs
 
   result = TestPrompt.call(
-    stage: first_stage,
+    stage: stage,
     course: course,
     original_code: current_code,
     test_runner_output: test_runner_output
