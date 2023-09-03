@@ -6,6 +6,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        course: ["redis", "docker", "git", "sqlite", "grep", "bittorrent"]
+        language: ["go", "python"]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -16,5 +21,9 @@ jobs:
 
       - run: make generate_fixtures
 
-      - name: Test
-        run: make test
+      - run: mkdir -p test_repositories
+      - run: cp -R fixtures/courses/${{ matrix.course }}/compiled_starters/${{ matrix.language }} test_repositories/${{ matrix.course }}
+      - run: git -C test_repositories/${{ matrix.course }} init
+
+      - name: Stage 1
+        run: bundle exec ruby main.rb ${{ matrix.course}} 1 test_repositories/${{ matrix.course }}
