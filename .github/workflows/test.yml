@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: cache/prompts
-          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-${{ hashFiles('prompts/**') }}
+          key: ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-${{ hashFiles('.github/workflows/test.yml', 'prompts/**') }}
           restore-keys: |
             ${{ runner.os }}-prompts-${{ matrix.course }}-${{ matrix.language}}-
             ${{ runner.os }}-prompts
