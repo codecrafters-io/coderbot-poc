@@ -1,9 +1,20 @@
-on: [push, pull_request]
+on:
+  push:
+    branches: [main]
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run tests
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2" # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - run: make generate_fixtures
+
+      - name: Test
         run: make test

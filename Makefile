@@ -65,3 +65,6 @@ git_status:
 git_push:
 	ls test_repositories | xargs -n1 -I {} git -C test_repositories/{} commit -am "test"
 	ls test_repositories | xargs -n1 -I {} git -C test_repositories/{} push origin master
+
+simulate_github_actions:
+	act push --container-architecture linux/amd64
