@@ -21,7 +21,6 @@ class LocalTestRunner
       "-v '#{File.expand_path(tester_dir)}:/tester:ro'",
       "-v '#{File.expand_path("fixtures/test.sh")}:/init.sh'",
       "-e CODECRAFTERS_SUBMISSION_DIR=/app",
-      "-e CODECRAFTERS_COURSE_PAGE_URL=http://test-app.codecrafters.io/url",
       "-e CODECRAFTERS_CURRENT_STAGE_SLUG=#{stage.slug}",
       "-e TESTER_DIR=/tester",
       "-w /app",
