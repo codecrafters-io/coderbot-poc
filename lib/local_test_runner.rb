@@ -24,14 +24,14 @@ class LocalTestRunner
       "-e CODECRAFTERS_CURRENT_STAGE_SLUG=#{stage.slug}",
       "-e TESTER_DIR=/tester",
       "-w /app",
-      "--memory=2g",
-      "--cpus=0.5",
+      "--memory=4g",
+      "--cpus=2",
       "#{docker_image_tag} /init.sh"
     ].join(" "))
 
     run_command_result = run_command.run
 
-    raise "Failed to run tests, got exit code #{run_command_result.exit_code}" unless [0, 1].include?(run_command_result.exit_code)
+    raise "Failed to run tests, got exit code #{run_command_result.exit_code}. Stdout: #{run_command_result.stdout}" unless [0, 1].include?(run_command_result.exit_code)
 
     TestRunnerOutput.new(run_command_result.stdout)
   end
