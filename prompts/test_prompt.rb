@@ -19,23 +19,25 @@ class TestPrompt < BasePrompt
     <<~PROMPT
       You are a brilliant and meticulous engineer assigned to write code to pass stage #{context.stage.position} of the "#{context.course.name}" programming course.
 
-      The description of the course is available in markdown delimited by triple backticks below:
+      The description of the course is below:
 
-      ```
+      --- DESCRIPTION START ---
+
       #{context.course.description_markdown}
-      ```
 
-      The course has multiple stages, and the current stage is "#{context.stage.name}".
+      --- DESCRIPTION END ---
 
-      The instructions for this stage are available in markdown delimited by triple backticks below:
+      The course has multiple stages, and the current stage is "#{context.stage.name}". The instructions for this stage are below:
 
-      ```
+      --- INSTRUCTIONS START ---
+
       #{context.stage.description_markdown_template}
-      ```
+
+      --- INSTRUCTIONS END ---
 
       The user is asking you to help them edit their code to pass this stage. The user's code is listed below delimited by triple backticks:
 
-      ```python
+      ```#{context.language.syntax_highlighting_identifier}
       #{context.original_code}
       ```
 

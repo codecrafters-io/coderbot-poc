@@ -19,6 +19,7 @@ class Steps::AttemptFixStep
     result = TestPrompt.call(
       stage: stage,
       course: course,
+      language: local_repository.language,
       original_code: current_code,
       test_runner_output: test_runner_output
     ).result

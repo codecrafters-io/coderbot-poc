@@ -1,6 +1,8 @@
 require "bundler"
 Bundler.require
 
+require "dotenv/load"
+
 require "active_support/all"
 require "active_model"
 
