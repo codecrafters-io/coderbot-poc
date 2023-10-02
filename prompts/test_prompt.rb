@@ -47,7 +47,7 @@ class TestPrompt < BasePrompt
       #{context.test_runner_output.last_stage_logs}
       ```
 
-      Fix the user's code so that it passes the stage.
+      Fix the user's code so that it passes the stage. Print the FULL contents of the edited file delimited by triple backticks.
 
       Here are some rules to follow:
 
@@ -58,7 +58,7 @@ class TestPrompt < BasePrompt
       * Try to simplify code where possible, don't overcomplicate things. If a block of code looks too convoluted, it's probably wrong and needs to be redone.
       * Write production quality code that you think would be acceptable in a real world codebase. Don't write code that you think is hacky and only passes the current stage, unless the stage instructions mention otherwise.
       * Be wary of code duplication, you might be able to solve the problem better by using recursion or re-using another function.
-      * Print the FULL contents of the file delimited by triple backticks. Don't print partial contents of the file.
+      * IMPORTANT: Print the FULL contents of the edited file delimited by triple backticks. Don't print partial contents of the file.
     PROMPT
   end
 end
