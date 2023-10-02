@@ -47,6 +47,8 @@ class TestPrompt < BasePrompt
       #{context.test_runner_output.last_stage_logs}
       ```
 
+      The tests are correct, there is definitely a bug in the user's code.
+
       Fix the user's code so that it passes the stage. Print the FULL contents of the edited file delimited by triple backticks.
 
       Here are some rules to follow:
