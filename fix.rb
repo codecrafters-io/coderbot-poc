@@ -8,7 +8,7 @@ Store.instance.load_from_file("fixtures/store.json")
 
 course = Store.instance.models_for(Course).detect { |course| course.slug == course_slug }
 stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
-stage = stages.detect { |stage| stage.slug == stage_slug } || raise "Stage not found for slug #{stage_slug}"
+stage = stages.detect { |stage| stage.slug == stage_slug } || raise("Stage not found for slug #{stage_slug}")
 local_repository = LocalRepository.new(repository_dir)
 
 workflow = Workflows::PassStageWorkflow.new(
