@@ -6,6 +6,10 @@ class TestRunnerOutput
   end
 
   def passed?
+    if last_stage_logs.nil?
+      raise "No stage logs found in output: #{raw_output}"
+    end
+
     last_stage_logs.gsub(/\e\[(\d+)m/, "").include?("Test passed.")
   end
 
