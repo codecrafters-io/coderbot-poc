@@ -13,6 +13,10 @@ class LocalTestRunner
 
     tester_dir = TesterDownloader.new(course).download_if_needed
 
+    course_stages = Store.instance.models_for(CourseStage).select { |stage| stage.course_id == course.id }
+    stages_to_test = course_stages.select { |s| s.position <= stage.position }
+    test_cases_json = stages_to_test.map(&:tester_test_case_json).to_json
+
     run_command = ShellCommand.new([
       "docker run",
       "--rm",
@@ -21,7 +25,8 @@ class LocalTestRunner
       "-v '#{File.expand_path(tester_dir)}:/tester:ro'",
       "-v '#{File.expand_path("fixtures/test.sh")}:/init.sh'",
       "-e CODECRAFTERS_SUBMISSION_DIR=/app",
-      "-e CODECRAFTERS_CURRENT_STAGE_SLUG=#{stage.slug}",
+      "-e CODECRAFTERS_TEST_CASES_JSON='#{test_cases_json}'",
+      "-e CODECRAFTERS_CURRENT_STAGE_SLUG=#{stage.slug}", # TODO: Remove this
       "-e TESTER_DIR=/tester",
       "-w /app",
       "--memory=4g",
@@ -31,9 +36,10 @@ class LocalTestRunner
 
     run_command_result = run_command.run
 
-    raise "Failed to run tests, got exit code #{run_command_result.exit_code}. Stdout: #{run_command_result.stdout}" unless [0, 1].include?(run_command_result.exit_code)
+    # Precompilation failures might cause the test runner to exit with a non-zero exit code.
+    # raise "Failed to run tests, got exit code #{run_command_result.exit_code}. Stdout: #{run_command_result.stdout} Stderr: #{run_command_result.stderr}" unless [0, 1].include?(run_command_result.exit_code)
 
-    TestRunnerOutput.new(run_command_result.stdout)
+    TestRunnerOutput.new(run_command_result)
   end
 
   protected

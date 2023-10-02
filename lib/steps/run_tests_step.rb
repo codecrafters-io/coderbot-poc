@@ -28,13 +28,20 @@ class Steps::RunTestsStep
   end
 
   def print_logs_for_console
-    puts "Logs: (Stage ##{stage.position})"
-    puts ""
-    puts test_runner_output.last_stage_logs
-    puts ""
+    if test_runner_output.compilation_failed?
+      puts "Compilation Failure Logs (Stage ##{stage.position})"
+      puts ""
+      puts test_runner_output.raw_output
+      puts ""
+    else
+      puts "Logs: (Stage ##{stage.position})"
+      puts ""
+      puts test_runner_output.last_stage_logs
+      puts ""
 
-    if test_runner_output.passed?
-      puts "All tests passed!"
+      if test_runner_output.passed?
+        puts "All tests passed!"
+      end
     end
   end
 

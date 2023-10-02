@@ -32,6 +32,6 @@ class CourseStage
       slug: slug,
       tester_log_prefix: "stage-#{position}",
       title: "Stage #{position}: #{name}"
-    }.to_json
+    }
   end
 end

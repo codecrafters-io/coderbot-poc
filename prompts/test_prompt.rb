@@ -6,7 +6,7 @@ class TestPrompt < BasePrompt
         messages: [
           {role: "system", content: system_message}
         ],
-        temperature: 0.7
+        temperature: 1
       }
     )
 
@@ -44,12 +44,15 @@ class TestPrompt < BasePrompt
       When they submitted their code, they saw the following error delimited by triple backticks below:
 
       ```
-      #{context.test_runner_output.last_stage_logs}
+      #{context.test_runner_output.compilation_failed? ? context.test_runner_output.raw_output : context.test_runner_output.last_stage_logs_without_colors}
       ```
 
       I'm sure the test suite is correct, so there is definitely a bug in the user's code. The bug might not be obvious, so you might need to read the user's code carefully to find it.
 
-      Fix the user's code so that it passes the stage. Print the FULL contents of the edited file delimited by triple backticks.
+      Your goal is to fix the user's code so that it passes the stage.
+
+      First, think through what the bug might be. Then, come up with a plan to fix the bug. Once you have a plan, implement it by editing the user's code. Print the FULL contents of the
+      edited file delimited by triple backticks.
 
       Here are some rules to follow:
 
