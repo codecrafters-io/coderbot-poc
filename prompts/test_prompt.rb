@@ -47,7 +47,7 @@ class TestPrompt < BasePrompt
       #{context.test_runner_output.last_stage_logs}
       ```
 
-      The tests are correct, there is definitely a bug in the user's code.
+      I'm sure the test suite is correct, so there is definitely a bug in the user's code. The bug might not be obvious, so you might need to read the user's code carefully to find it.
 
       Fix the user's code so that it passes the stage. Print the FULL contents of the edited file delimited by triple backticks.
 
