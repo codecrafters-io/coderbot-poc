@@ -26,6 +26,16 @@ run_bittorrent_python:
 	git -C test_repositories/bittorrent-python commit -am "Initial commit"
 	bundle exec ruby main.rb bittorrent test_repositories/bittorrent-python
 
+run_fix:
+	rm -rf test_repositories/arashout
+	git clone git@github.com:rohitpaulk/test-arashout.git test_repositories/arashout
+	rm -rf test_repositories/arashout/.git
+	git -C test_repositories/arashout init
+	git -C test_repositories/arashout add .
+	git -C test_repositories/arashout commit -am "Initial commit"
+	bundle exec ruby fix.rb git write_tree test_repositories/arashout
+
+
 git_reset:
 	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} reset --hard
 
