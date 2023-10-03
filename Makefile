@@ -1,5 +1,6 @@
 generate_fixtures:
 	bundle exec ruby scripts/generate_fixtures.rb
+	rm -rf fixtures/courses
 	mkdir -p fixtures/courses
 	git clone https://github.com/codecrafters-io/build-your-own-redis fixtures/courses/redis
 	git clone https://github.com/codecrafters-io/build-your-own-docker fixtures/courses/docker
@@ -7,6 +8,7 @@ generate_fixtures:
 	git clone https://github.com/codecrafters-io/build-your-own-sqlite fixtures/courses/sqlite
 	git clone https://github.com/codecrafters-io/build-your-own-grep fixtures/courses/grep
 	git clone https://github.com/codecrafters-io/build-your-own-bittorrent fixtures/courses/bittorrent
+	git clone http://github.com/codecrafters-io/build-your-own-http-server fixtures/courses/http-server
 
 run_redis_python:
 	mkdir -p test_repositories
@@ -25,6 +27,16 @@ run_bittorrent_python:
 	git -C test_repositories/bittorrent-python add .
 	git -C test_repositories/bittorrent-python commit -am "Initial commit"
 	bundle exec ruby main.rb bittorrent test_repositories/bittorrent-python
+
+run_fix:
+	rm -rf test_repositories/fix-test
+	git clone <test> test_repositories/fix-test
+	rm -rf test_repositories/fix-test/.git
+	git -C test_repositories/fix-test init
+	git -C test_repositories/fix-test add .
+	git -C test_repositories/fix-test commit -am "Initial commit"
+	bundle exec ruby fix.rb http-server post-file test_repositories/fix-test
+
 
 git_reset:
 	ls test_repositories | xargs -n1 -I {} git --no-pager -C test_repositories/{} reset --hard

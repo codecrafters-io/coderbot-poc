@@ -12,7 +12,17 @@ class BasePrompt
     self.class.diskcache.cache(signature_hash) do
       puts "Cache miss, calling OpenAI API with signature #{signature_hash}"
 
-      client = OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"], request_timeout: 240)
+      client = OpenAI::Client.new(
+        access_token: ENV["OPENAI_API_KEY"],
+        uri_base: "https://oai.hconeai.com/",
+        request_timeout: 240,
+        extra_headers: {
+          "Helicone-Auth": "Bearer #{ENV["HELICONE_API_KEY"]}",
+          "Helicone-Property-Prompt": "CoderBot-#{self.class.name}",
+          "helicone-stream-force-format": "true"
+        }
+      )
+
       client.chat(*args, **kwargs)
     end
   end

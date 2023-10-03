@@ -26,4 +26,12 @@ class CourseStage
       "name" => nil
     }
   end
+
+  def tester_test_case_json
+    {
+      slug: slug,
+      tester_log_prefix: "stage-#{position}",
+      title: "Stage #{position}: #{name}"
+    }
+  end
 end

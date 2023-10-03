@@ -19,33 +19,38 @@ class TestPrompt < BasePrompt
     <<~PROMPT
       You are a brilliant and meticulous engineer assigned to write code to pass stage #{context.stage.position} of the "#{context.course.name}" programming course.
 
-      The description of the course is available in markdown delimited by triple backticks below:
+      The description of the course is below:
 
-      ```
+      --- DESCRIPTION START ---
+
       #{context.course.description_markdown}
-      ```
 
-      The course has multiple stages, and the current stage is "#{context.stage.name}".
+      --- DESCRIPTION END ---
 
-      The instructions for this stage are available in markdown delimited by triple backticks below:
+      The course has multiple stages, and the current stage is "#{context.stage.name}". The instructions for this stage are below:
 
-      ```
+      --- INSTRUCTIONS START ---
+
       #{context.stage.description_markdown_template}
-      ```
+
+      --- INSTRUCTIONS END ---
 
       The user is asking you to help them edit their code to pass this stage. The user's code is listed below delimited by triple backticks:
 
-      ```python
+      ```#{context.language.syntax_highlighting_identifier}
       #{context.original_code}
       ```
 
       When they submitted their code, they saw the following error delimited by triple backticks below:
 
       ```
-      #{context.test_runner_output.last_stage_logs}
+      #{context.test_runner_output.compilation_failed? ? context.test_runner_output.raw_output : context.test_runner_output.last_stage_logs_without_colors}
       ```
 
-      Fix the user's code so that it passes the stage.
+      Your goal is to fix the user's code so that it passes the stage.
+
+      First, think through what the bug might be. Then, come up with a plan to fix the bug. Once you have a plan, implement it by editing the user's code. Print the FULL contents of the
+      edited file delimited by triple backticks.
 
       Here are some rules to follow:
 
@@ -56,7 +61,7 @@ class TestPrompt < BasePrompt
       * Try to simplify code where possible, don't overcomplicate things. If a block of code looks too convoluted, it's probably wrong and needs to be redone.
       * Write production quality code that you think would be acceptable in a real world codebase. Don't write code that you think is hacky and only passes the current stage, unless the stage instructions mention otherwise.
       * Be wary of code duplication, you might be able to solve the problem better by using recursion or re-using another function.
-      * Print the FULL contents of the file delimited by triple backticks. Don't print partial contents of the file.
+      * IMPORTANT: Print the FULL contents of the edited file delimited by triple backticks. Don't print partial contents of the file.
     PROMPT
   end
 end

@@ -3,3 +3,4 @@ cache/
 fixtures/courses
 fixtures/testers
 tmp/
+.env

@@ -37,13 +37,15 @@ class Store
     parsed_response = JSON.parse(response.body)
 
     courses = parsed_response["data"].map do |course_data|
+      next if course_data["attributes"]["release-status"] == "alpha"
+
       Course.new(
         id: course_data["id"],
         slug: course_data["attributes"]["slug"],
         description_markdown: course_data["attributes"]["description-markdown"],
         name: course_data["attributes"]["name"]
       ).tap(&:validate!)
-    end
+    end.compact
 
     courses.each do |course|
       add(course)
