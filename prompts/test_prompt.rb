@@ -6,7 +6,7 @@ class TestPrompt < BasePrompt
         messages: [
           {role: "system", content: system_message}
         ],
-        temperature: 1
+        temperature: 0.7
       }
     )
 
@@ -46,8 +46,6 @@ class TestPrompt < BasePrompt
       ```
       #{context.test_runner_output.compilation_failed? ? context.test_runner_output.raw_output : context.test_runner_output.last_stage_logs_without_colors}
       ```
-
-      I'm sure the test suite is correct, so there is definitely a bug in the user's code. The bug might not be obvious, so you might need to read the user's code carefully to find it.
 
       Your goal is to fix the user's code so that it passes the stage.
 
